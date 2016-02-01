@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>3F2493AB-E8EA-4A65-B152-D39D55C64BA5</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Cai</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7FB74B652B4A14AF36A744D6B24629A15BEF536E</key>
+		<string>http://192.168.1.16:8080/cailai.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Cai.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7FB74B652B4A14AF36A744D6B24629A15BEF536E</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://192.168.1.16:8080/cailai.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7FB74B652B4A14AF36A744D6B24629A15BEF536E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7FB74B652B4A14AF36A744D6B24629A15BEF536E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cailai-9-23%E4%B8%8A%E7%BA%BF%E9%A1%B9%E7%9B%AE%20</string>
+		</dict>
+	</array>
+</dict>
+</plist>
