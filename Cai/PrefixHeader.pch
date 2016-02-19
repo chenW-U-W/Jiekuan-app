@@ -87,6 +87,8 @@ static NSString * const SecretKey = @"09ff08cb5e4afb2fa04776d524903791";//正式
 #define navigationBarColor UIColorFromRGB(0xff8700)
 
 
+#define ConstFont [UIFont systemFontOfSize:13]
+
 
 #define ViewInterVal 5/ViewWithDevicWidth //间距
 #define RateImageViewWidth 180/ViewWithDevicWidth //图片宽高

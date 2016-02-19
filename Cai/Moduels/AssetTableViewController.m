@@ -83,23 +83,7 @@
       
       //充值 提现按钮
     
-//      UIButton *rechargeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//      rechargeBtn.frame = CGRectMake(10, 0, self.view.frame.size.width/2.0-20/ViewWithDevicWidth, rechageAndWithdrawBtnHeight);
-//      [rechargeBtn setBackgroundColor:[UIColor colorWithRed:0.16 green:0.62 blue:0.87 alpha:1]];
-//      [rechargeBtn addTarget:self action:@selector(rechargeFn) forControlEvents:UIControlEventTouchUpInside];
-//      [rechargeBtn setTitle:@"充值" forState:UIControlStateNormal];
-//      [rechargeBtn setTintColor:[UIColor whiteColor]];
-//      [view addSubview:rechargeBtn];
-//      
-//      
-//      UIButton *withdrawBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//      withdrawBtn.frame = CGRectMake(self.view.frame.size.width/2.0+10/ViewWithDevicWidth, 0, self.view.frame.size.width/2.0-20/ViewWithDevicWidth, rechageAndWithdrawBtnHeight);
-//      //[withdrawBtn setBackgroundImage:[UIImage imageNamed:@"12-2"] forState:UIControlStateNormal];
-//    [withdrawBtn setBackgroundColor:[UIColor colorWithRed:1 green:0.45 blue:0 alpha:1]];
-//      [withdrawBtn addTarget:self action:@selector(withDrawFn) forControlEvents:UIControlEventTouchUpInside];
-//      [withdrawBtn setTitle:@"提现" forState:UIControlStateNormal];
-//      [withdrawBtn setTintColor:[UIColor whiteColor]];
-//      [view addSubview:withdrawBtn];
+
 
       //网络请求
       _mutableArray = [NSMutableArray arrayWithObjects:@"我的投标",@"我的推荐",@"交易记录",@"我的借款",@"资金统计", nil];
@@ -107,6 +91,18 @@
     cellImageArray = [NSMutableArray arrayWithObjects:@"我的投标",@"我的推荐",@"交易记录",@"我的借款",@"利息统计", nil];
     //接受注册成功的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentView) name:@"sucessRegist" object:nil];
+    
+    //由此可判断清除的话最好--清除KuserId---
+//    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"kUserId"]) {
+//        [self unLoginFn];
+//    }
+//    else
+//    {
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 140, 0);//保证了在5s上  不被遮挡
+        [AnimationView showCustomAnimationViewToView:self.view];
+        
+        [self loadData];
+//    }
     
 }
 -(void)presentView
@@ -225,25 +221,10 @@
         registBtn = nil;
         
     }
-    //由此可判断清除的话最好--清除KuserId---
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"kUserId"]) {
         [self unLoginFn];
     }
-    else
-    {
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 140, 0);//保证了在5s上  不被遮挡
     
-//        //添加MBProgressHUD
-//        progressHUD = [[MBProgressHUD alloc] init];
-//        progressHUD.color = [UIColor grayColor];
-//        progressHUD.labelText = @"正在刷新";
-//        progressHUD.labelFont = [UIFont systemFontOfSize:13];
-//        [self.view addSubview:progressHUD];
-//        [progressHUD show:YES];
-        [AnimationView showCustomAnimationViewToView:self.view];
-
-    [self loadData];
-    }
 }
 
 
@@ -254,23 +235,26 @@
     CLLoginVC.hidesBottomBarWhenPushed = YES;
     CLLoginVC.sucessToAssetLB = ^{
        
+        
+        [maskView removeFromSuperview];
+        [imageView removeFromSuperview];
+        [btn removeFromSuperview];
+        [registBtn removeFromSuperview];
+        maskView = nil;
+        imageView = nil;
+        btn= nil;
+        registBtn = nil;
+
+        
         //检测是否手势密码打开
         if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue]== NO ) {            
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"登录成功是否打开手势密码" message:@"还可以在更多->我的账户中打开" delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"打开", nil];
             [alertView show];
         }
+        [self loadData];
 
     };
-    
-    [maskView removeFromSuperview];
-    [imageView removeFromSuperview];
-    [btn removeFromSuperview];
-   [registBtn removeFromSuperview];
-    maskView = nil;
-    imageView = nil;
-    btn= nil;
-    registBtn = nil;
     
     [self.navigationController pushViewController:CLLoginVC animated:YES];
     

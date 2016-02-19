@@ -50,13 +50,16 @@
             
             DLog(@"%@",resultArray);
             
-            for (int i=0;i<resultArray.count;i++) {
+            for (int i=1;i<resultArray.count-1;i++) {
                 
                 DetailInterestObj *detailInterestObj= [[DetailInterestObj alloc] initWithAttributes:responseDic withKeyName:[resultArray objectAtIndex:i]];
                 [mutableArray addObject:detailInterestObj];
                 
                 
             }
+            //将总计移到下面
+            DetailInterestObj *detailInterestObj= [[DetailInterestObj alloc] initWithAttributes:responseDic withKeyName:[resultArray objectAtIndex:0]];
+            [mutableArray addObject:detailInterestObj];
 
             }
         

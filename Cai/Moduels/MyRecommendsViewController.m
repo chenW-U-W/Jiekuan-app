@@ -45,44 +45,40 @@
     
     self.navigationController.navigationBar.barTintColor = navigationBarColor;
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15], NSForegroundColorAttributeName:[UIColor whiteColor]};
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:YES];
-//    //添加MBProgressHUD
-//    progressHUD = [[MBProgressHUD alloc] init];
-//    progressHUD.color = [UIColor grayColor];
-//    progressHUD.labelText = @"正在刷新";
-//    progressHUD.labelFont = [UIFont systemFontOfSize:13];
-//    [self.view addSubview:progressHUD];
-//    [progressHUD show:YES];
-    [AnimationView showCustomAnimationViewToView:self.view];
     
-    [self loadData];
-   
+    
+    
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 10;
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
-    if (_totalArray.count != 0) {
+    
         _tableView = [[PullingRefreshTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.pullingDelegate = self;
         [self.view addSubview:_tableView];
-
-    }else
-    {
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 204, 258)];
-    _imageView.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2.0, [UIScreen mainScreen].bounds.size.height/2.0-40/ViewWithDevicHeight);
-    _imageView.image = [UIImage imageNamed:@"60"];
-    [self.view addSubview:_imageView];
     
-    }
-
+    [self loadData];
+    
 }
 
 - (void)loadData
 {
+    
+    [AnimationView showCustomAnimationViewToView:self.view];
+
 dispatch_async(dispatch_get_global_queue(0, 0), ^{
     
     [Recommender recommenderWithBlock:^(id response, NSError *error) {
@@ -106,6 +102,15 @@ dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 if (self.totalArray.count!=0) {
                     [self.tableView reloadData];
                 }
+                if (self.totalArray.count == 0) {
+                    
+                    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 204, 258)];
+                    _imageView.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2.0, [UIScreen mainScreen].bounds.size.height/2.0-40/ViewWithDevicHeight);
+                    _imageView.image = [UIImage imageNamed:@"60"];
+                    [self.view addSubview:_imageView];
+                    
+                }
+
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self getFinishedLoad];
 
@@ -159,6 +164,9 @@ dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
         cell.textLabel.text = [_mutableArray  objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [_valueArray objectAtIndex:indexPath.row] ;
+        
+        cell.textLabel.font = ConstFont;
+        cell.detailTextLabel.font = ConstFont;
     }
    
    

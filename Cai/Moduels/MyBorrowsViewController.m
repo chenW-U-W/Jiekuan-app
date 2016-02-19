@@ -142,6 +142,8 @@ enum LabelTag{
 
         cell.textLabel.text = [_mutableArray  objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [_valueArray objectAtIndex:indexPath.row] ;
+        cell.textLabel.font = ConstFont;
+        cell.detailTextLabel.font = ConstFont;
     }
     
       return cell;

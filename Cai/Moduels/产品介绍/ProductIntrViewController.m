@@ -173,7 +173,11 @@
     [countBtn setBackgroundImage:[UIImage imageNamed:@"计算器按钮"] forState:UIControlStateHighlighted];
     [countBtn addTarget:self action:@selector(presentCountView) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:countBtn];
-      
+    
+    
+    [AnimationView showCustomAnimationViewToView:self.view];
+    
+    [self  loadData];
 }
 
 - (void)presentCountView
@@ -466,9 +470,7 @@
 //    progressHUD.labelFont = [UIFont systemFontOfSize:13];
 //    [self.view addSubview:progressHUD];
 //    [progressHUD show:YES];
-    [AnimationView showCustomAnimationViewToView:self.view];
-
-      [self  loadData];
+    
 
 }
 
@@ -701,7 +703,7 @@
                       cell.selectionStyle = UITableViewCellSelectionStyleNone;
                       _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 70, anotherCellHeight)];
                       _timeLabel.text = @"剩余时间：";
-                      _timeLabel.font = [UIFont systemFontOfSize:14];
+                      _timeLabel.font = ConstFont;
                       [cell.contentView addSubview:_timeLabel];
                       
                       
@@ -729,7 +731,7 @@
                     
                     timeOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(100+12, 0, DeviceSizeWidth-200, anotherCellHeight)];
                     timeOutLabel.text = @"投标已经结束";
-                    timeOutLabel.font = [UIFont systemFontOfSize:15];
+                    timeOutLabel.font = ConstFont;
                     timeOutLabel.textAlignment = NSTextAlignmentCenter;
                     timeOutLabel.textColor = [UIColor grayColor];
                     [cell.contentView addSubview:timeOutLabel];
@@ -758,7 +760,7 @@
                 [cell.contentView addSubview:imageView];
                 
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 6, DeviceSizeWidth-70, 31)];
-                label.font = [UIFont systemFontOfSize:14];
+                label.font = ConstFont;
                 if (_array.count !=0) {
                      label.text = [_array objectAtIndex:indexPath.row-2];
                 }               

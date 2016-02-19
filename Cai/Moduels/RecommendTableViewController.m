@@ -84,6 +84,10 @@
 
     [self checkVersions];
     
+    [AnimationView showCustomAnimationViewToView:self.view];
+    [self  loadData];
+    
+    
 }
 
 
@@ -96,7 +100,9 @@
             
             NSString *localVersion = [NSString stringWithFormat:@"V%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
             DLog(@"%@",localVersion);
-            if(![versionString isEqualToString:localVersion]  || [versionString compare:localVersion] == NSOrderedAscending)//服务器版本 = 或者 > 本地版本都会提示升级，< 本地版本不会提示
+           
+            
+            if([versionString compare:localVersion] == NSOrderedSame || [versionString compare:localVersion] == NSOrderedDescending)//服务器版本 = 或者 > 本地版本都会提示升级，< 本地版本不会提示
             {
                 
                 UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
@@ -171,8 +177,7 @@
 //    [_animationView animationedWithCustomViewOption:UIViewAnimationOptionCurveLinear];
 //    [self.view addSubview:_animationView];
 //    self.view.userInteractionEnabled = NO;
-    [AnimationView showCustomAnimationViewToView:self.view];
-      [self  loadData];
+   
 }
 
 

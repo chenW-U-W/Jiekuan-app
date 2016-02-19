@@ -205,26 +205,32 @@
       nameImageView.layer.cornerRadius = 5;
       nameImageView.clipsToBounds  = YES;
     
+    [self setNeedsDisplay];
     
-    int percent = _recommendObj.ratio;
-    //1  区分产品列表和产品详情   2 区分区间的取值
     
-    float realEndAngle = (percent>25)?((percent-25.0)/25.0)*M_PI_2:percent/25.0*M_PI_2-M_PI_2;
-    float  endAngle = realEndAngle;
-    float  beginAngle=  -0.5*M_PI;
-    int clockwise = 0;
-    CGColorRef color = NORMALCOLOR.CGColor;
-    CGContextRef contextRef = UIGraphicsGetCurrentContext();
-    CGSize viewSize = self.bounds.size;
-    CGPoint center = CGPointMake(viewSize.width / 2.0, viewSize.height / 2.0);
-    CGFloat radius = rateImageView.frame.size.width / 2.0;
-    CGContextBeginPath(contextRef);
-    CGContextMoveToPoint(contextRef, center.x, center.y);
-    CGContextAddArc(contextRef, center.x, center.y, radius,beginAngle,endAngle, clockwise);
+}
+
+- (void)drawRect:(CGRect)rect
+{
     
-    CGContextSetFillColorWithColor(contextRef, color);
-    CGContextFillPath(contextRef);
-    
+//    int percent = _recommendObj.ratio;
+//    //1  区分产品列表和产品详情   2 区分区间的取值
+//    
+//    float realEndAngle = (percent>25)?((percent-25.0)/25.0)*M_PI_2:percent/25.0*M_PI_2-M_PI_2;
+//    float  endAngle = realEndAngle;
+//    float  beginAngle=  -0.5*M_PI;
+//    int clockwise = 0;
+//    CGColorRef color = NORMALCOLOR.CGColor;
+//    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+//    CGSize viewSize = self.bounds.size;
+//    CGPoint center = CGPointMake(viewSize.width / 2.0, viewSize.height / 2.0);
+//    CGFloat radius = rateImageView.frame.size.width / 2.0;
+//    CGContextBeginPath(contextRef);
+//    CGContextMoveToPoint(contextRef, center.x, center.y);
+//    CGContextAddArc(contextRef, center.x, center.y, radius,beginAngle,endAngle, clockwise);
+//    CGContextSetFillColorWithColor(contextRef, color);
+//    CGContextFillPath(contextRef);
+
 }
 
 -(void)buttonClick

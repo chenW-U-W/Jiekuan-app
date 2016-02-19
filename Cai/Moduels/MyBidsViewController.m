@@ -67,6 +67,9 @@
     self.navigationController.navigationBar.barTintColor = navigationBarColor;
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15], NSForegroundColorAttributeName:[UIColor whiteColor]};
     self.view.backgroundColor = BACKGROUND_COLOR;
+    
+    [self loadDataWithType:_typeID];//全部标
+
 }
 
 
@@ -214,7 +217,6 @@
 //    [self.view addSubview:progressHUD];
 //    [progressHUD show:YES];
 
-    [self loadDataWithType:_typeID];//全部标
     
    
 }
@@ -300,6 +302,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+        cell.textLabel.font = [UIFont systemFontOfSize:13];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
              cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     

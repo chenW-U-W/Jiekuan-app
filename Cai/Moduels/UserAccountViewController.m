@@ -141,7 +141,7 @@
             for (id objec in array) {
                 if ([objec isKindOfClass:[UserAccountCell class]]) {
                     cell = (UserAccountCell *)objec;
-                    
+                    cell.textLabel.font = ConstFont;
                     break;
                 }
                 
@@ -168,7 +168,7 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 17, 120, 16)];
         label.text = [textArray objectAtIndex:indexPath.row];
-        label.font = [UIFont boldSystemFontOfSize:15];
+        label.font = ConstFont;
         [cell.contentView addSubview:label];
         UIImageView * arrowView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width-20, 17, 9, 16)] ;
         arrowView.image = [UIImage imageNamed:@"13"];

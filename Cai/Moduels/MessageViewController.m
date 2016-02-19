@@ -219,7 +219,7 @@
         
         if (!_readedTableView) {
             //添加已读
-            CGRect  frame= CGRectMake(0,TAPHEIGHT+16, DeviceSizeWidth, DeviceSizeHeight-TABHEIGHT - 64-TAPHEIGHT-16);//
+            CGRect  frame= CGRectMake(0,TAPHEIGHT+16, DeviceSizeWidth, DeviceSizeHeight - 64-TAPHEIGHT-16);//
             _readedTableView= [[PullingRefreshTableView alloc] initWithFrame:frame style:UITableViewStylePlain];
             _readedTableView.tag = 3001;
             _readedTableView.backgroundColor = BACKGROUND_COLOR;
@@ -254,7 +254,7 @@
         
         
         if (!_unreadTableView) {
-            CGRect  frame= CGRectMake(0,TAPHEIGHT+16, DeviceSizeWidth, DeviceSizeHeight-TABHEIGHT - 64-TAPHEIGHT-16);//
+            CGRect  frame= CGRectMake(0,TAPHEIGHT+16, DeviceSizeWidth, DeviceSizeHeight - 64-TAPHEIGHT-16);//
             _unreadTableView = [[PullingRefreshTableView alloc] initWithFrame:frame style:UITableViewStylePlain];
             _unreadTableView.tag = 3000;
             _unreadTableView.backgroundColor = BACKGROUND_COLOR;
@@ -324,24 +324,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableView.tag == 3000) {
-        static NSString *CellIdentifier = @"MessageCell";
-        MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MessageCell" owner:nil options:nil];
-            cell = [nib objectAtIndex:0];
-            
-           
-        }
-        if (_unreadArray.count>0) {
-            cell.messageOBJ = [_unreadArray objectAtIndex:indexPath.section];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        return cell;
-        
-    }
+    
     static NSString *CellIdentifier = @"IsReadedMessageCell";
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
@@ -352,17 +335,27 @@
         
     }
     if (_readedArray.count >0) {
-        cell.messageOBJ = [_readedArray objectAtIndex:indexPath.section];
+        cell.messageOBJ = [_readedArray objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    
+    if (tableView.tag == 3000) {
+        
+        
+        if (_unreadArray.count>0) {
+            cell.messageOBJ = [_unreadArray objectAtIndex:indexPath.row];
+            
+        }
+      
+        
+    }
+
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 130;
+    return 107;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

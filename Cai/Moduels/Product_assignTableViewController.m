@@ -137,7 +137,8 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-
+      page = 1;
+     [AnimationView showCustomAnimationViewToView:self.view];
     
 }
 
@@ -155,7 +156,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-    page = 1;
+  
    
     
 //    //添加MBProgressHUD
@@ -166,7 +167,7 @@
 //    [self.view addSubview:progressHUD];
 //    [progressHUD show:YES];
     
-    [AnimationView showCustomAnimationViewToView:self.view];
+   
   
 
     

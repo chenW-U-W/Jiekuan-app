@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "7AA2FE2231620031F21A4D7FDD705060230D5A50",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "7AA2FE2231620031F21A4D7FDD705060230D5A50" : 0,
+    "7FB74B652B4A14AF36A744D6B24629A15BEF536E" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3F2493AB-E8EA-4A65-B152-D39D55C64BA5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "7AA2FE2231620031F21A4D7FDD705060230D5A50" : "Jiekuan-app\/",
+    "7FB74B652B4A14AF36A744D6B24629A15BEF536E" : "cailai-9-23%E4%B8%8A%E7%BA%BF%E9%A1%B9%E7%9B%AE%20"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Cai",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Cai.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/chenW-U-W\/Jiekuan-app.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "7AA2FE2231620031F21A4D7FDD705060230D5A50"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.1.16:8080\/cailai.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "7FB74B652B4A14AF36A744D6B24629A15BEF536E"
+    }
+  ]
+}

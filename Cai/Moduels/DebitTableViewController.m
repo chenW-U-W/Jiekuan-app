@@ -71,7 +71,7 @@
     _DoneButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-50, 0, 50, BARVIEWHEIGHT);
     _DoneButton.backgroundColor = [UIColor clearColor];
     [_DoneButton setTitle:@"完成" forState:UIControlStateNormal];
-    _DoneButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    _DoneButton.titleLabel.font = [UIFont systemFontOfSize:13];
     [_DoneButton setTitleColor:[UIColor colorWithRed:1.000 green:0.451 blue:0.000 alpha:1] forState:UIControlStateNormal];
     [_DoneButton addTarget:self action:@selector(doneClicked) forControlEvents:UIControlEventTouchUpInside];
     [_barView addSubview:_DoneButton];
@@ -234,23 +234,26 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.font = ConstFont;
     }
     if (indexPath.row == 0) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 50)];
         label.text = @"仅限上海房屋抵押借贷";
         label.textAlignment = NSTextAlignmentCenter;
         label.textColor = [UIColor redColor];
+        label.font = ConstFont;
         [cell.contentView addSubview:label];
     }
     if (indexPath.row == 1) {
         cell.textLabel.text = @"请填写以下借款信息:";
+        
     }
     if (indexPath.row == 2) {
         cell.textLabel.text = @"姓名";
        
         _debit_name_textField = [[UITextField alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 200, 0, 200, SECONDHEIGHT)];
          _debit_name_textField.placeholder = @"请填写姓名";
-        _debit_name_textField.font = [UIFont systemFontOfSize:15];
+        _debit_name_textField.font = [UIFont systemFontOfSize:13];
         [cell.contentView addSubview:_debit_name_textField];
         //_debit_name_textField.backgroundColor = [UIColor redColor];
     }
@@ -258,6 +261,7 @@
         cell.textLabel.text = @"电话";
       
         _debit_phonenum_Label = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 200, 0, 200, SECONDHEIGHT)];
+        _debit_phonenum_Label.font = ConstFont;
         _debit_phonenum_Label.text  = [[NSUserDefaults standardUserDefaults] objectForKey:@"kUserMobile"];
         [cell.contentView addSubview:_debit_phonenum_Label];
     }
@@ -269,6 +273,7 @@
         _debit_purpose_button.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 200, 0, 200, SECONDHEIGHT);
          [_debit_purpose_button setTitle:@"请选择借款用途" forState:UIControlStateNormal];
         //_debit_purpose_button.titleLabel.textAlignment = NSTextAlignmentLeft;
+        _debit_purpose_button.titleLabel.font = ConstFont;
         _debit_purpose_button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_debit_purpose_button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         //_debit_purpose_button.backgroundColor = [UIColor greenColor];
@@ -295,13 +300,16 @@
         _debit_deadLine_button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
 
         _debit_deadLine_button.titleLabel.textAlignment = NSTextAlignmentLeft;
+        _debit_deadLine_button.titleLabel.font = ConstFont;
         [cell.contentView addSubview:_debit_deadLine_button];
     }
     if (indexPath.row == 6) {
         cell.textLabel.text = @"借款金额(万)";
+        
         _debit_account_textField = [[UITextField alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 200, 0, 200, SECONDHEIGHT)];
+       
         _debit_account_textField.placeholder = @"请输入借款金额";
-        _debit_account_textField.font = [UIFont systemFontOfSize:15];
+        _debit_account_textField.font = [UIFont systemFontOfSize:13];
         [cell.contentView addSubview:_debit_account_textField];
     }
 

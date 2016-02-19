@@ -208,7 +208,17 @@
     [TapView addSubview:assignmentTab];
     
     
-    
+    if ([type intValue] == 1) {
+        UIButton *btn = (UIButton *)[self.view viewWithTag:2000];
+        [self loadDateWithButtonType:btn];
+    }
+    else
+    {
+        UIButton *btn = (UIButton *)[self.view viewWithTag:2001];
+        [self loadDateWithButtonType:btn];
+        
+    }
+
 }
 
 -(void)loadDateWithButtonType:(UIButton *)sender
@@ -332,17 +342,7 @@
     //    [progressHUD show:YES];
    // [AnimationView showCustomAnimationViewToView:self.view];
     
-    if ([type intValue] == 1) {
-        UIButton *btn = (UIButton *)[self.view viewWithTag:2000];
-        [self loadDateWithButtonType:btn];
-    }
-    else
-    {
-        UIButton *btn = (UIButton *)[self.view viewWithTag:2001];
-        [self loadDateWithButtonType:btn];
-
-    }
-    //[self loadDataWithType:type withIsrefresh:YES];
+        //[self loadDataWithType:type withIsrefresh:YES];
     
     
 }

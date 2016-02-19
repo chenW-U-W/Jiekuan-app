@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42497B011C76B02800091F9A /* 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42497B001C76B02800091F9A /* 40@2x.png */; };
 		42A268841C4E0C24007A28BD /* progress底图@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42A268831C4E0C24007A28BD /* progress底图@2x.png */; };
 		42A268861C4E133E007A28BD /* remend_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42A268851C4E133E007A28BD /* remend_circle@2x.png */; };
 		42A2688F1C4E2F25007A28BD /* 底栏图标1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42A268871C4E2F25007A28BD /* 底栏图标1@2x.png */; };
@@ -214,8 +215,6 @@
 		E22032511B1EBDEC005693BF /* BindingInvestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = E22032501B1EBDEC005693BF /* BindingInvestObj.m */; };
 		E220326E1B205885005693BF /* 详情底色.png in Resources */ = {isa = PBXBuildFile; fileRef = E220326C1B205885005693BF /* 详情底色.png */; };
 		E220326F1B205885005693BF /* 详情底色@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E220326D1B205885005693BF /* 详情底色@2x.png */; };
-		E22032761B207494005693BF /* 40.png in Resources */ = {isa = PBXBuildFile; fileRef = E22032741B207494005693BF /* 40.png */; };
-		E22032771B207494005693BF /* 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E22032751B207494005693BF /* 40@2x.png */; };
 		E23410821B0DDF30004F7F07 /* Introduce.m in Sources */ = {isa = PBXBuildFile; fileRef = E23410811B0DDF30004F7F07 /* Introduce.m */; };
 		E23410941B0F2DFE004F7F07 /* borrowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23410931B0F2DFE004F7F07 /* borrowerViewController.m */; };
 		E25946701B4658F1000D732B /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = E259466F1B4658F1000D732B /* 120.png */; };
@@ -486,6 +485,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42497B001C76B02800091F9A /* 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "40@2x.png"; sourceTree = "<group>"; };
 		42A268831C4E0C24007A28BD /* progress底图@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress底图@2x.png"; sourceTree = "<group>"; };
 		42A268851C4E133E007A28BD /* remend_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remend_circle@2x.png"; sourceTree = "<group>"; };
 		42A268871C4E2F25007A28BD /* 底栏图标1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "底栏图标1@2x.png"; sourceTree = "<group>"; };
@@ -791,8 +791,6 @@
 		E22032501B1EBDEC005693BF /* BindingInvestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingInvestObj.m; path = Models/BindingInvestObj.m; sourceTree = "<group>"; };
 		E220326C1B205885005693BF /* 详情底色.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "详情底色.png"; sourceTree = "<group>"; };
 		E220326D1B205885005693BF /* 详情底色@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "详情底色@2x.png"; sourceTree = "<group>"; };
-		E22032741B207494005693BF /* 40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 40.png; sourceTree = "<group>"; };
-		E22032751B207494005693BF /* 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "40@2x.png"; sourceTree = "<group>"; };
 		E22032791B21381B005693BF /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		E220327A1B21381B005693BF /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		E220327B1B21381B005693BF /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
@@ -1765,8 +1763,7 @@
 				E28642FD1AD7B0700051A6D4 /* 29-2@2x.png */,
 				E28642FE1AD7B0700051A6D4 /* 39.png */,
 				E28642FF1AD7B0700051A6D4 /* 39@2x.png */,
-				E22032741B207494005693BF /* 40.png */,
-				E22032751B207494005693BF /* 40@2x.png */,
+				42497B001C76B02800091F9A /* 40@2x.png */,
 				E28643001AD7B0700051A6D4 /* 40-2.png */,
 				E28643011AD7B0700051A6D4 /* 40-2@2x.png */,
 				E28643041AD7B0700051A6D4 /* 41.png */,
@@ -2332,7 +2329,6 @@
 				E28644121AD7DCBC0051A6D4 /* messageView.xib in Resources */,
 				E28643851AD7B0700051A6D4 /* 17@2x.png in Resources */,
 				E2950B4D1B0090F700B7B0FC /* safe_17.png in Resources */,
-				E22032771B207494005693BF /* 40@2x.png in Resources */,
 				E2C9730C1ACE8EB800F18AB0 /* AssetCell.xib in Resources */,
 				E28643E01AD7B0700051A6D4 /* 64.png in Resources */,
 				E28643951AD7B0700051A6D4 /* 24-2@2x.png in Resources */,
@@ -2366,7 +2362,6 @@
 				E28643F21AD7B0700051A6D4 /* 73.png in Resources */,
 				E28643DA1AD7B0700051A6D4 /* 61.png in Resources */,
 				E220324E1B1D6DB7005693BF /* 12-1@2x.png in Resources */,
-				E22032761B207494005693BF /* 40.png in Resources */,
 				E28643F81AD7B0700051A6D4 /* 76.png in Resources */,
 				64F047A31B8F141C00DCCB56 /* 产品列表btn左白@2x.png in Resources */,
 				E28643CE1AD7B0700051A6D4 /* 56-2.png in Resources */,
@@ -2555,6 +2550,7 @@
 				E2950B471B0090F700B7B0FC /* arrow_03.png in Resources */,
 				E217A6D31B62430E00814A2B /* 9-2@2x.png in Resources */,
 				E28643A21AD7B0700051A6D4 /* 29-2.png in Resources */,
+				42497B011C76B02800091F9A /* 40@2x.png in Resources */,
 				E28643561AD7B0700051A6D4 /* 1.png in Resources */,
 				E286438D1AD7B0700051A6D4 /* 20@2x.png in Resources */,
 				E208D0061ADE58E000E881D9 /* UserAccountCell.xib in Resources */,
@@ -2886,8 +2882,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai Cailai Finance Information Service Co., Ltd. (T82AMT8Z8U)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai Cailai Finance Information Service Co., Ltd. (T82AMT8Z8U)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: honghua wang (WL8PM8963E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: honghua wang (WL8PM8963E)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2915,7 +2911,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CailaiWeb.cailai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "29055686-afb0-4c98-9482-99cba035b283";
+				PROVISIONING_PROFILE = "1b50a7df-7ab0-4722-b28a-8c5d1a575f36";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2926,8 +2922,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai Cailai Finance Information Service Co., Ltd. (T82AMT8Z8U)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai Cailai Finance Information Service Co., Ltd. (T82AMT8Z8U)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: honghua wang (WL8PM8963E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: honghua wang (WL8PM8963E)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2955,7 +2951,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CailaiWeb.cailai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "29055686-afb0-4c98-9482-99cba035b283";
+				PROVISIONING_PROFILE = "1b50a7df-7ab0-4722-b28a-8c5d1a575f36";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 			};

@@ -21,6 +21,7 @@
 
 @property(nonatomic,strong) NSMutableArray *detailTitleArray;
 @property(nonatomic,strong) NSMutableArray *detailValueArray;
+@property(nonatomic,strong) NSMutableArray *constDetailTitleArray;
 
 @property(nonatomic,strong) UIButton *previousBtn;
 
@@ -59,7 +60,8 @@
     
     _totalArray = [[NSMutableArray alloc] init];
     _detailValueArray= [[NSMutableArray alloc] init];
-    _detailTitleArray = [[NSMutableArray alloc] initWithObjects:@"充值",@"投资",@"收利息",@"本金",@"提现", nil];
+    _detailTitleArray = [[NSMutableArray alloc] initWithObjects:@"充值总额",@"投资总额",@"已收利息",@"已收本金",@"提现总额", nil];
+    _constDetailTitleArray = [[NSMutableArray alloc] init];
     
     _previousBtn = _currentMontBtn;
     
@@ -75,8 +77,7 @@
     if (_detailTitleArray) {
         _detailTitleArray = nil;
     }
- _detailTitleArray = [[NSMutableArray alloc] initWithObjects:@"充值",@"投资",@"收利息",@"本金",@"提现", nil];
-}
+  _detailTitleArray = [[NSMutableArray alloc] initWithObjects:@"充值总额",@"投资总额",@"已收利息",@"已收本金",@"提现总额", nil];}
 
 - (void)loadInterestData
 {
@@ -208,31 +209,18 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
    
     if (_totalArray.count>0) {
         DetailInterestObj *detailObj = [_totalArray objectAtIndex:indexPath.section];
-        if (indexPath.row == 0) {
+            _constDetailTitleArray = [detailObj.mutableArray mutableCopy];
             self.detailTitleArray = nil;
             [_detailTitleArray insertObject:[detailObj.mutableArray objectAtIndex:indexPath.row] atIndex:0];
-           
-           
             cell.textLabel.text = [_detailTitleArray objectAtIndex:indexPath.row];
             cell.textLabel.font = [UIFont systemFontOfSize:14];
             
-            [detailObj.mutableArray replaceObjectAtIndex:0 withObject:@""];
+            [_constDetailTitleArray replaceObjectAtIndex:0 withObject:@""];
             
-            cell.detailTextLabel.text = [detailObj.mutableArray objectAtIndex:indexPath.row];
+            cell.detailTextLabel.text = [_constDetailTitleArray  objectAtIndex:indexPath.row];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
 
-        }
-        else
-        {
-            self.detailTitleArray = nil;
-             [_detailTitleArray insertObject:[detailObj.mutableArray objectAtIndex:indexPath.row] atIndex:0];
-            cell.detailTextLabel.text = [detailObj.mutableArray objectAtIndex:indexPath.row];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:14];
-            cell.textLabel.text = [_detailTitleArray objectAtIndex:indexPath.row];
-            cell.textLabel.font = [UIFont systemFontOfSize:14];
-
-        }
-        
+            
     }
        return cell;
 }
@@ -241,6 +229,18 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 {
     return 35.0;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 5;
+}
+
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

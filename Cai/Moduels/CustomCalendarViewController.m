@@ -123,7 +123,7 @@
          _customCalendarView.tapBlock = ^(NSString *year,NSString *month){
         //弹出datepicker 和  toolbar
              _barView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height+1, [UIScreen mainScreen].bounds.size.width, BARVIEWHEIGHT)];
-             _barView.backgroundColor = [UIColor colorWithRed:0.922 green:0.922 blue:0.925 alpha:1];
+            _barView.backgroundColor = [UIColor colorWithRed:0.922 green:0.922 blue:0.925 alpha:1];
              [[UIApplication sharedApplication].keyWindow addSubview:_barView];
              
             
