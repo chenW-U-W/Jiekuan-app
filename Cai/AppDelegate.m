@@ -221,15 +221,6 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
     [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ, UMShareToQzone, UMShareToWechatSession, UMShareToWechatTimeline]];
     
     
-    //设置启动页（类似网易新闻）
-     adView = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [adView setImage:[UIImage imageNamed:@"640x1136.png"]];
-    [self.window addSubview:adView];
-    [self.window bringSubviewToFront:adView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self removeSplashView];
-    });
-    
     
     
     //设置通知
@@ -276,7 +267,27 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
     
     
     
+    //设置启动页（类似网易新闻）
+    adView = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    [adView setImage:[UIImage imageNamed:@"640x1136.png"]];
+    [self.window addSubview:adView];
+    [self.window bringSubviewToFront:adView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self removeSplashView];
+    });
+    
+    
+    
+    NSString * version = [self getIOSVersion];
+    //当用户打开app的时候 需要验证指纹解锁
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kUserMobile"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] && [version doubleValue] > 8.0) {
+        [self vertifyFingerPrint];
+    }
+    
+    
+    
     [self.window makeKeyAndVisible];
+
       return YES;
 }
 
@@ -301,8 +312,13 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
     }
     completionHandler(UIBackgroundFetchResultNewData);
     
-}
+    }
 
+
+- (NSString *)getIOSVersion
+{
+    return [[UIDevice currentDevice] systemVersion];
+}
 // 在 iOS8 系统中，还需要添加这个方法。通过新的 API 注册推送服务
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
@@ -475,35 +491,25 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
         if (!ispresentGVC) {
             [self.window.rootViewController presentViewController:_gesturePasswordVC animated:YES completion:nil];
             ispresentGVC = YES;
-            
-            
         }
         
         __block   UITabBarController *weakTabbarVC = tabBarVC;
         __block   AppDelegate *weaDdelegate  = self;
         
         _gesturePasswordVC.FPWGBBlock = ^{
-            
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"您已退出当前账户请重新登录" delegate:weaDdelegate cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [alertView show];
-            
-            
             [weakSelf.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
             [User logout];
             ispresentGVC = NO;
             weakTabbarVC.selectedIndex = 0;//我的资产
         };
         
-        
-        
     }
-    
-
-
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [self vertifyFingerPrint];
+   // [self vertifyFingerPrint];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -521,7 +527,6 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
 //    for (AnimationView *animationView in VC.view.subviews) {
 //        [animationView animationedWithCustomViewOption:UIViewAnimationOptionCurveLinear];
 //    }
-    
    
 }
 

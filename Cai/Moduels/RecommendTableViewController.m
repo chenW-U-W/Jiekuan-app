@@ -173,13 +173,7 @@
 
 - (void)loadData
 {
-    
-    
-    
     [AnimationView showCustomAnimationViewToView:self.view];
-    
-    
-    
     
     //请求滚动栏图片
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -194,7 +188,6 @@
             
         }];
     });
-    
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [RecommendedObj recommendedWithBlock:^(id response, NSError *error) {
@@ -218,8 +211,7 @@
                 self.recomendedObj = response;
                 //刷新表视图
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [_tableView reloadData];
-                    
+                    [_tableView reloadData];                    
                 });
 
             }

@@ -96,8 +96,10 @@ typedef NS_ENUM(NSInteger,AlertType){
     //接受注册成功的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentView) name:@"sucessRegist" object:nil];
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kUserMobile"]) {
+        [self loadDataWithAnimationView];
+    }
     
-      [self loadDataWithAnimationView];
 
     
     //注册通知

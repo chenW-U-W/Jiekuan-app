@@ -182,8 +182,6 @@ enum
     if (alertView.tag == CANCELTAG) {
         
     }
-   
-    
 }
 
 -(void)dealloc
