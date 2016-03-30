@@ -10,6 +10,7 @@
 #import "MessageCell.h"
 #import "AnimationView.h"
 #import "CailaiAPIClient.h"
+#import "UIButton+Extend.h"
 @interface MessageViewController ()
 {
     int page;
@@ -24,8 +25,8 @@
 @property (nonatomic,strong)NSMutableArray *unreadArray;
 @property (nonatomic,strong)NSMutableArray *readedArray;
 @property (nonatomic,strong)NSString *portString;
-
-
+@property (nonatomic,assign)BOOL isRefresh;
+@property (nonatomic,strong)UIButton *currentBtn;
 @end
 
 @implementation MessageViewController
@@ -33,6 +34,8 @@
 - (void)loadDataWithType:(NSString *)atype withRefresh:(BOOL)isRefresh
 {
     
+    if (isRefresh) {
+        
     
     if ([isRead intValue]== 0) {
         //未读
@@ -119,7 +122,7 @@
         
     }
     
-    
+    }
     
     
 }
@@ -185,7 +188,7 @@
     unReadBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [unReadBtn addTarget:self action:@selector(loadDateWithButtonType:) forControlEvents:UIControlEventTouchUpInside];
     unReadBtn.tag = 2000;
-    
+    unReadBtn.isFirstClick = YES;
     
     readedBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     readedBtn.frame = CGRectMake(unReadBtn.frame.size.width, 0, unReadBtn.frame.size.width, TAPHEIGHT);
@@ -196,15 +199,23 @@
     [readedBtn setTitle:@"已读消息" forState:UIControlStateNormal];
     [readedBtn addTarget:self action:@selector(loadDateWithButtonType:) forControlEvents:UIControlEventTouchUpInside];
     readedBtn.tag = 2001;
+    readedBtn.isFirstClick = YES;
     
     [TapView addSubview:unReadBtn];
     [TapView addSubview:readedBtn];
+    
+    
+    _currentBtn = unReadBtn;
+    
+    [self loadDateWithButtonType:_currentBtn];
     
     
 }
 
 -(void)loadDateWithButtonType:(UIButton *)sender
 {
+    _currentBtn = sender;
+    
     if (sender.tag == 2001) {
         //改变btn的颜色
         [unReadBtn setBackgroundColor:[UIColor whiteColor]];
@@ -236,9 +247,6 @@
         isRead = @"1";
         page = 1;
         
-        
-        [self loadDataWithType:isRead withRefresh:YES];
-        [AnimationView showCustomAnimationViewToView:self.view];
     }
     if (sender.tag == 2000) {
         if (_readedTableView) {
@@ -270,10 +278,15 @@
         isRead = @"0";
         page = 1;
         
-        [self loadDataWithType:isRead withRefresh:YES];
-        [AnimationView showCustomAnimationViewToView:self.view];
+        
     }
     
+    _isRefresh = _currentBtn.isFirstClick;
+    if (_isRefresh) {
+        [self loadDataWithType:isRead withRefresh:_isRefresh];
+        [AnimationView showCustomAnimationViewToView:self.view];
+    }
+    _currentBtn.isFirstClick = NO;
     
     
 }
@@ -291,15 +304,7 @@
 //    _unreadTableView.delegate = self;
 //    _unreadTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 //    _unreadTableView.tag = 3000;
-   
-    
-    
-    //如果在
-    if ([isRead intValue] == 0) {
-        UIButton *btn = (UIButton *)[self.view viewWithTag:2000];
-        [self loadDateWithButtonType:btn];
-    }
-    
+  
     
 }
 
@@ -331,25 +336,22 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MessageCell" owner:nil options:nil];
         cell = [nib objectAtIndex:0];
-        
-        
-    }
-    if (_readedArray.count >0) {
-        cell.messageOBJ = [_readedArray objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
     }
-    
     if (tableView.tag == 3000) {
         
         
         if (_unreadArray.count>0) {
             cell.messageOBJ = [_unreadArray objectAtIndex:indexPath.row];
-            
         }
-      
+    }
+    else if (_readedArray.count >0) {
+        cell.messageOBJ = [_readedArray objectAtIndex:indexPath.row];
         
     }
-
+    
+    
     return cell;
 }
 
@@ -366,12 +368,21 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.01;
+    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _messageDeatilVC = [[MessageDetailViewController alloc] init];
+    __block MessageViewController* weakSelf = self;
+    __block UIButton *weakButton = _currentBtn;
+    _messageDeatilVC.returnBackB = ^{
+        weakButton.isFirstClick = YES;
+        [weakSelf loadDateWithButtonType:weakButton];
+        
+    };
+
+    
     _messageDeatilVC.hidesBottomBarWhenPushed = YES;
     if (tableView.tag == 3000) {        
         if (_unreadArray.count>0) {

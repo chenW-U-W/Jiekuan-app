@@ -624,9 +624,11 @@
 
 - (void)goBack:(UIButton *)sender
 {
-
+    if (_returnedCallBB) {
+        self.returnedCallBB();
+    }
       [self.navigationController popViewControllerAnimated:YES];
-    [timer isValid];
+      [timer isValid];
 
 }
 

@@ -88,8 +88,8 @@
 }
 - (void)goBack:(id)sender
 {
-    
-      [self.navigationController popToRootViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"rechargeBackToRootNotification" object:nil];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

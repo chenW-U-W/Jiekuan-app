@@ -434,7 +434,7 @@
     }
     //3-----
     if (totalMoney>_canBidMoney) {
-        NSString *string = @"购买金额与您所选红包金额超过可投金额";
+        NSString *string = @"购买金额超过可投金额";
         [self startAlertViewAnimationWithString:string withButton:sender];
         return;
     }

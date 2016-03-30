@@ -49,19 +49,19 @@
 
 
 //html5 域名地址
-#define URLSTRING  @"http://api.cailai.com/test/4/"//正式
-#define URLPROTOCOLSTRING  @"http://m.cailai.com/bond/pact?"//正式 投标协议
-#define HUIFUURL @"https://lab.chinapnr.com/muser/publicRequests"//正式
-#define   CailaiAPIBaseURL  @"http://api.cailai.com/v1.0"//正式
-#define  CailaiAPIBaseURLString  @"http://api.cailai.com/v1.0"//正式
-static NSString * const SecretKey = @"09ff08cb5e4afb2fa04776d524903791";//正式
+//#define URLSTRING  @"http://api.cailai.com/test/4/"//正式
+//#define URLPROTOCOLSTRING  @"http://m.cailai.com/bond/pact?"//正式 投标协议
+//#define HUIFUURL @"https://lab.chinapnr.com/muser/publicRequests"//正式
+//#define   CailaiAPIBaseURL  @"http://api.cailai.com/v1.0"//正式
+//#define  CailaiAPIBaseURLString  @"http://api.cailai.com/v1.0"//正式
+//static NSString * const SecretKey = @"09ff08cb5e4afb2fa04776d524903791";//正式
 
-//#define URLSTRING  @"http://apitest.cailai.com/test/4/"//测试
-//#define URLPROTOCOLSTRING  @"http://mtest.cailai.com/bond/pact?"//测试
-//#define HUIFUURL   @"http://mertest.chinapnr.com/muser/publicRequests"//测试
-//#define   CailaiAPIBaseURL  @"http://apitest.cailai.com/v1.0"//测试
-//#define  CailaiAPIBaseURLString  @"http://apitest.cailai.com/v1.0"//测试
-//static NSString * const SecretKey = @"bc7cfba8367fdc117d2ac8e85a5effe3";//测试
+#define URLSTRING  @"http://apitest.cailai.com/test/4/"//测试
+#define URLPROTOCOLSTRING  @"http://mtest.cailai.com/bond/pact?"//测试
+#define HUIFUURL   @"http://mertest.chinapnr.com/muser/publicRequests"//测试
+#define   CailaiAPIBaseURL  @"http://apitest.cailai.com/v1.0"//测试
+#define  CailaiAPIBaseURLString  @"http://apitest.cailai.com/v1.0"//测试
+static NSString * const SecretKey = @"bc7cfba8367fdc117d2ac8e85a5effe3";//测试
 
 #define ALERTVIEW {UIAlertView *alert =[[UIAlertView alloc] initWithTitle:nil message:@"无法连接服务请稍后再试" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];[alert show];}
 //

@@ -61,6 +61,13 @@
     
     self.navigationController.navigationBar.barTintColor = NORMALCOLOR;
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15], NSForegroundColorAttributeName:[UIColor whiteColor]};
+    
+   
+}
+
+- (void)moreLoginReturnBack:(NSNotification *)info
+{
+   
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -360,8 +367,6 @@
         }
         else
         {
-//            UITableViewCell *cell = (UITableViewCell *)[self.view viewWithTag:1000];
-//            cell.hidden = YES;
             _existButton.alpha = 0;
             [User logout];
             self.tabBarController.selectedIndex = 0;
@@ -378,10 +383,8 @@
 -(void)existClick
 {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kUserId"]) {
-        
-        
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"确认要退出" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-                  alertView.tag = 1001;
+        alertView.tag = 1001;
         [alertView show];
     }
 

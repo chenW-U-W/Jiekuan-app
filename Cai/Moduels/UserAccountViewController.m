@@ -5,7 +5,9 @@
 //  Created by 启竹科技 on 15/4/15.
 //  Copyright (c) 2015年 启竹科技. All rights reserved.
 //
-
+typedef NS_ENUM(NSInteger,AlertType){
+    AlertTypeEvaluateError = 2000
+};
 #import "UserAccountViewController.h"
 #import "UserAccountCell.h"
 #import "BindbankViewController.h"
@@ -18,13 +20,14 @@
 #import "KeychainItemWrapper.h"
 #import "CLLoginViewController.h"
 #import "MYFMDB.h"
-
-@interface UserAccountViewController ()
+#import "AAPLLocalAuthentication.h"
+@interface UserAccountViewController ()<UIAlertViewDelegate>
 {
       UISwitch *gestureSwitch;
       NSArray *textArray;
       NSMutableArray *userArray;
       MYFMDB *myFMDB;
+      UISwitch *fingerPrintSwitch;
 }
 @property (nonatomic,strong)GesturePasswordController *gestureVC;
 @end
@@ -49,9 +52,8 @@
       self.navigationItem.leftBarButtonItem = leftItem;
       
       
-      textArray = [NSArray arrayWithObjects:@"绑定银行卡",@"身份认证",@"修改登录密码",@"手势密码", nil];
+      textArray = [NSArray arrayWithObjects:@"绑定银行卡",@"身份认证",@"修改登录密码",@"手势密码",@"指纹", nil];
      _gestureVC = [[GesturePasswordController alloc] init];
-   
      userArray = [[NSMutableArray alloc] init];
     
     
@@ -82,8 +84,6 @@
             
                 [[NSUserDefaults standardUserDefaults] setObject:realNameString forKey:@"kUserRealName"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                
                 [_tableView reloadData]; 
             
         }
@@ -174,7 +174,7 @@
         arrowView.image = [UIImage imageNamed:@"13"];
         [cell.contentView addSubview:arrowView];
         cell.userInteractionEnabled = YES;
-        if (indexPath.row==3) {
+        if (indexPath.row==3 || indexPath.row ==4) {
             [arrowView removeFromSuperview];
         }
         
@@ -186,7 +186,7 @@
     
     
         if (indexPath.section == 1) {
-            
+           //手势密码
         if(indexPath.row == 3)
         {
             
@@ -221,6 +221,42 @@
             
             
         }
+            //指纹
+            if(indexPath.row == 4)
+            {
+                
+                
+                if (!fingerPrintSwitch) {
+                    fingerPrintSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 10- 50, 14, 43, 22)];
+                    fingerPrintSwitch.onTintColor = [UIColor orangeColor];
+                }
+                
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenFingerprint"]) {
+                    fingerPrintSwitch.on = [[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenFingerprint"] boolValue];
+                }
+                else
+                {
+                    fingerPrintSwitch.on = NO;
+                }
+                
+                [fingerPrintSwitch addTarget:self action:@selector(fingerGestureCodeFn:) forControlEvents:UIControlEventValueChanged];
+                
+                
+                [cell.contentView addSubview:fingerPrintSwitch];
+                
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                //如果用户未登录  隐藏cell
+                if (![[NSUserDefaults standardUserDefaults] objectForKey:@"kUserId"] ) {
+                    cell.hidden = YES;
+                    
+                }
+                
+                return cell;
+                
+                
+            }
+
         
         
         
@@ -229,8 +265,90 @@
     return cell;
  }
 
+#pragma mark  ----指纹开关-------
+- (void)fingerGestureCodeFn:(UISwitch *)aswitch
+{
+    BOOL isOpenGesturePassword =  [[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenFingerprint"] boolValue];
+    isOpenGesturePassword = !isOpenGesturePassword;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenFingerprint"] ;
+    [[NSUserDefaults standardUserDefaults] synchronize];//同步
+    
+    if (isOpenGesturePassword) {//由关闭到打开
+        //点击确定之后开启密码
+        AAPLLocalAuthentication *AAPLocalAu = [[AAPLLocalAuthentication alloc] init];
+        
+        [AAPLocalAu canEvaluatePolicy];
+        AAPLocalAu.aapLocalAuSucessedCallBackB= ^(NSString *msg){
+            
+            NSLog(@"验证成功");
+        };
+        
+        [self presentViewController:AAPLocalAu animated:NO completion:^{
+            
+        }];
+        
+        AAPLocalAu.evaluateSucessedCallBackB = ^(NSString *msg)
+        {
+            NSLog(@"-----");
+            BOOL isOpenFingerprint = YES;
+            [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenFingerprint] forKey:@"isOpenFingerprint"];
+            [[NSUserDefaults  standardUserDefaults] synchronize];
+            [self dismissViewControllerAnimated:NO completion:^{
+                
+            }];
+        };
+        DLog(@"----%d",[[NSThread currentThread] isMainThread]);
+        __block BOOL isOpenGesturePasswordWeak = isOpenGesturePassword;
+        AAPLocalAu.evaluateFailedCallBackB = ^(NSString *msg,NSInteger errorCoe)
+        {
+            //失败分为很多种   后弹出设置失败，可在'我的账户'-'指纹'中再次设置
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *errorAlert = [[UIAlertView alloc]  initWithTitle:nil message:@"设置失败，可在'我的账户'-'指纹'中再次设置" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                errorAlert.tag = AlertTypeEvaluateError;
+                [errorAlert show];
+            });
+            isOpenGesturePasswordWeak = !isOpenGesturePasswordWeak;
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePasswordWeak] forKey:@"isOpenFingerprint"] ;
+            [[NSUserDefaults standardUserDefaults] synchronize];//同步
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                gestureSwitch.on = isOpenGesturePasswordWeak;
+            });
+            
+            switch (errorCoe) {
+                case -1:
+                {
+                    //三次错误
+                }
+                    break;
+                case -2:
+                {
+                    //点击取消
+                    
+                }
+                    
+                    break;
+                case -4:
+                {
+                    //被系统取消
+                }
+                    break;
+                case -3:
+                {
+                    //输入密码   被隐藏了
+                }
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+        };
+        [AAPLocalAu evaluatePolicy];
 
-
+    }
+}
 
 
 
@@ -373,6 +491,13 @@
 
     
 
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self dismissViewControllerAnimated:NO completion:^{
+        
+    }];
 }
 
 

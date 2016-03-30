@@ -30,7 +30,7 @@
     
       self.amountTextField.delegate = self;
       self.amountTextField.keyboardType =  UIKeyboardTypeDecimalPad;
-    [self.amountTextField becomeFirstResponder];
+    //[self.amountTextField becomeFirstResponder];
     
     
     //添加提现金额不得小于100
@@ -62,7 +62,7 @@
 }
 - (void)goBack:(id)sender
 {
-      
+    
       [self.navigationController popViewControllerAnimated:YES];
 }
 

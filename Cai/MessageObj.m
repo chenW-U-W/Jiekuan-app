@@ -19,7 +19,14 @@
     self.title = [attributes valueForKey:@"title"];
     self.content = [attributes objectForKey:@"content"];
     NSString *send_time = [attributes objectForKey:@"send_time"];
+    if([send_time isKindOfClass:[NSNull class]])
+    {
+    self.send_time = @"";
+    }
+    else
+    {
     self.send_time = [TimeObj stringFromReceivedDate:[TimeObj dateChangeFromTimeIntervalString:send_time withFormat:@"yyyy-MM-dd HH:mm:ss"] withDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    }
     self.MessageId = [attributes objectForKey:@"id"];
 
     return self;

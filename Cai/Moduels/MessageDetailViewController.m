@@ -77,6 +77,10 @@
 
 - (void)goBack:(UIButton *)sender
 {
+//    if(self.returnBackB)
+//    {
+//    self.returnBackB();
+//    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -5,6 +5,13 @@
 //  Created by 启竹科技 on 15/4/2.
 //  Copyright (c) 2015年 启竹科技. All rights reserved.
 //
+typedef NS_ENUM(NSInteger,AlertType){
+    AlertTypeShoushi = 2000,
+    AlertTypeOverdue,
+    AlertTypeNetWorkError,
+    AlertTypeFingerPrint,
+    AlertTypeEvaluateError
+};
 
 #import "AssetTableViewController.h"
 #import "AssetCell.h"
@@ -29,8 +36,9 @@
 #import "DebitTableViewController.h"
 #import "AnimationView.h"
 #import "InterestCountViewController.h"
+#import "AAPLLocalAuthentication.h"
 #define rechageAndWithdrawBtnHeight  41
-@interface AssetTableViewController ()
+@interface AssetTableViewController ()<UIAlertViewDelegate>
 {
 
       UIView *backView;//背景图
@@ -46,6 +54,7 @@
     NSMutableArray *cellImageArray;
 }
 @property(nonatomic,strong)GesturePasswordController *gestureVC;
+@property(nonatomic,assign)AlertType alertType;
 @end
 
 @implementation AssetTableViewController
@@ -58,7 +67,7 @@
     [_gestureVC clear];
     
     
-      CGRect  frame=CGRectMake(0, 0, DeviceSizeWidth, DeviceSizeHeight);
+      CGRect  frame=CGRectMake(0, 0, DeviceSizeWidth, DeviceSizeHeight-20-40-TABHEIGHT);
       _tableView = [[PullingRefreshTableView alloc] initWithFrame:frame pullingDelegate:self];
       
       
@@ -78,37 +87,47 @@
       
       DLog(@"%@",NSStringFromCGRect(self.view.frame));
       
-      UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-164 , self.view.frame.size.width, 43)];
-      [self.view addSubview:view];
-      
-      //充值 提现按钮
     
-
 
       //网络请求
       _mutableArray = [NSMutableArray arrayWithObjects:@"我的投标",@"我的推荐",@"交易记录",@"我的借款",@"资金统计", nil];
     
-    cellImageArray = [NSMutableArray arrayWithObjects:@"我的投标",@"我的推荐",@"交易记录",@"我的借款",@"利息统计", nil];
+     cellImageArray = [NSMutableArray arrayWithObjects:@"我的投标",@"我的推荐",@"交易记录",@"我的借款",@"利息统计", nil];
     //接受注册成功的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentView) name:@"sucessRegist" object:nil];
     
-    //由此可判断清除的话最好--清除KuserId---
-//    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"kUserId"]) {
-//        [self unLoginFn];
-//    }
-//    else
-//    {
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 140, 0);//保证了在5s上  不被遮挡
-        [AnimationView showCustomAnimationViewToView:self.view];
-        
-        [self loadData];
-//    }
     
+      [self loadDataWithAnimationView];
+
+    
+    //注册通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rechargeBacKMethod:) name:@"rechargeBackToRootNotification" object:nil];//充值成功的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(drawBacKMethod:) name:@"drawBackToRootNotification" object:nil];//提现成功的通知
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moreLoginReturnBack:) name:@"moreLoginReturnBack" object:nil];//我的账户中，登陆成功
 }
+
+- (void)moreLoginReturnBack:(NSNotification *)info
+{
+    [self loadDataWithAnimationView];
+}
+
+- (void)rechargeBacKMethod:(NSNotification *)info
+{
+    [self loadDataWithAnimationView];
+}
+
+- (void)drawBacKMethod:(NSNotification *)info
+{
+    [self loadDataWithAnimationView];
+}
+
+
 -(void)presentView
 {
     [[UIApplication sharedApplication].keyWindow makeToast:@"注册成功，请登录" duration:2 position:[NSValue valueWithCGPoint:CGPointMake(DeviceSizeWidth/2.0,DeviceSizeHeight/2.0-70/ViewWithDevicHeight)] title:@"温馨提示:"];
 }
+
+
 
 -(void)setBadgeNum:(int)badgeNum
 {
@@ -180,6 +199,9 @@
     
       RechargeViewController *rechargeVC = [[RechargeViewController alloc] init];
       rechargeVC.hidesBottomBarWhenPushed = YES;
+    rechargeVC.returnBackB = ^{
+        [self loadData];
+    };
       [self.navigationController pushViewController:rechargeVC animated:YES];
       
 
@@ -190,6 +212,9 @@
       DLog(@"提现");
       DrawViewController   *withDrawVC = [[DrawViewController alloc] init];
       withDrawVC.hidesBottomBarWhenPushed = YES;
+      withDrawVC.returnBackB = ^{
+        [self loadData];
+    };
       [self.navigationController pushViewController:withDrawVC animated:YES];
 }
 
@@ -223,7 +248,9 @@
     }
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"kUserId"]) {
         [self unLoginFn];
+        return;
     }
+    
     
 }
 
@@ -250,9 +277,10 @@
         if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue]== NO ) {            
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"登录成功是否打开手势密码" message:@"还可以在更多->我的账户中打开" delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"打开", nil];
+            alertView.tag = AlertTypeShoushi;
             [alertView show];
         }
-        [self loadData];
+        [self loadDataWithAnimationView];
 
     };
     
@@ -277,26 +305,42 @@
     [self.navigationController pushViewController:CLRegistVC animated:YES];
 }
 
+- (void)loadDataWithAnimationView
+{
+    [AnimationView showCustomAnimationViewToView:self.view];
+    [self loadData];
+}
 
 - (void)loadData
 {
     
     
       dispatch_async(dispatch_get_global_queue(0, 0), ^{
+          
+         
           //加载数据
           [AssetObj getAssetWithBlock:^(id posts, NSError *error) {
+              
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  [AnimationView hideCustomAnimationViweFromView:self.view];
+              });
               if(error.code == -1009)
               {
                   ALERTVIEW;
               }
-              else if (error.code == 5)
+              else if (error.code == 103)
               {
-               //未登录
+               //登陆账号失效 退出登陆 并加载UI视图
+                  UIAlertView *aletview =  [[UIAlertView alloc] initWithTitle:nil message:error.domain delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                  aletview.tag = AlertTypeOverdue;
+                  [aletview show];
+                  
               }
              
-              else if(error.code>5&error.code<1000)
+              else if(error.code>6)
               {
                UIAlertView *aletview =  [[UIAlertView alloc] initWithTitle:nil message:error.domain delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                  aletview.tag = AlertTypeNetWorkError;
                   [aletview show];
                   
               }
@@ -312,11 +356,11 @@
                   });
               }
 //              [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-              [AnimationView hideCustomAnimationViweFromView:self.view];
+              
               //完成后
               [self.tableView tableViewDidFinishedLoading];
               self.tableView.reachedTheEnd  =YES;
-              self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 180, 0);
+              
           }];
           
  
@@ -346,11 +390,7 @@
       if (section == 0) {
             return 1;
       }
-   
-      
-            return _mutableArray.count;
-      
-    
+      return _mutableArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -360,7 +400,6 @@
       }
       else
       {
-      
             return 40;
       }
 }
@@ -412,7 +451,6 @@
         UITableViewCell *cell  =  [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if (cell == nil) {
-            
             
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -538,18 +576,7 @@
         [self.navigationController pushViewController:interestVC animated:YES];
         
     }
-//    if (indexPath.row == 4) {
-//        
-////        MyReceiveViewController *myReceiveVC = [[MyReceiveViewController alloc] init];
-////        myReceiveVC.hidesBottomBarWhenPushed = YES;
-////        [self.navigationController pushViewController:myReceiveVC animated:YES];
-//        
-//        MyReturnedMoneyTableViewController *myReturnedTVC = [[MyReturnedMoneyTableViewController alloc] init];
-//        myReturnedTVC.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:myReturnedTVC animated:YES];
-//
-//    }
-//    
+
    
 }
 
@@ -589,57 +616,164 @@
 #pragma mark----------
 #pragma mark alertviewDelegate-------
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-
-   
+{//取消
     
-    if (buttonIndex==0) {
-        DLog(@"忽略");
-        BOOL isOpenGesturePassword = NO;
-        [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenGesturePassword"];
-        
-    }
-    else
-    {
-        
-        
-        __block AssetTableViewController *weakSelf = self;
-        _gestureVC.ssBlock = ^{
-            
-            //在我的资产设置手势成功后 。。。。
-            BOOL isOpenGesturePassword = YES;
-            [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenGesturePassword"];
-            [[NSUserDefaults  standardUserDefaults] synchronize];
-            [weakSelf dismissViewControllerAnimated:YES completion:nil];
-            DLog(@"设置成功");
-        };
-        //1 查询数据库看数据库中是否有用户的信息
-        MYFMDB *_myFMDB = [[MYFMDB alloc] init];
-        if (![_myFMDB isTableOK]) {
-            [_myFMDB createTable];
-        }
-        User *user = [User shared];
-        BOOL isExist =  [_myFMDB selectData:user.mobile];//用户是否登录过本机
-        if (isExist) {//登陆过
-            BOOL isOpenGesturePassword = YES;
-            //..........手势密码状态打开
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenGesturePassword"] ;
-            [[NSUserDefaults standardUserDefaults] synchronize];//同步
-            //.........查询数据库在本地保存手势密码
-            NSString  *passWord =  [_myFMDB selectKeyWordFromTableWithData:user.mobile];
-            [[NSUserDefaults standardUserDefaults] setObject:passWord forKey:@"kSecValueData"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-        }
-
-        else
+    switch (alertView.tag) {
+        case AlertTypeShoushi:
         {
-            
-            
-        [self presentViewController:_gestureVC animated:YES completion:nil];
-        }
+            if (buttonIndex==0) {
+                DLog(@"忽略");
+                BOOL isOpenGesturePassword = NO;
+                [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenGesturePassword"];
+                
+            }
+            else
+            {
+                
+                
+                __block AssetTableViewController *weakSelf = self;
+                _gestureVC.ssBlock = ^{
+                    
+                    //在我的资产设置手势成功后 。。。。
+                    BOOL isOpenGesturePassword = YES;
+                    [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenGesturePassword"];
+                    [[NSUserDefaults  standardUserDefaults] synchronize];
+                    DLog(@"设置成功");
+                    
+                    [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    
+                    UIAlertView *fingerAlertview = [[UIAlertView alloc] initWithTitle:nil message:@"开启指纹解锁" delegate:weakSelf cancelButtonTitle:@"不开启" otherButtonTitles:@"好的", nil];
+                    fingerAlertview.tag = AlertTypeFingerPrint;
+                    [fingerAlertview show];
+                    
+                };
+                //1 查询数据库看数据库中是否有用户的信息
+                MYFMDB *_myFMDB = [[MYFMDB alloc] init];
+                if (![_myFMDB isTableOK]) {
+                    [_myFMDB createTable];
+                }
+                User *user = [User shared];
+                BOOL isExist =  [_myFMDB selectData:user.mobile];//用户是否登录过本机
+                if (isExist) {//登陆过
+                    BOOL isOpenGesturePassword = YES;
+                    //..........手势密码状态打开
+                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenGesturePassword] forKey:@"isOpenGesturePassword"] ;
+                    [[NSUserDefaults standardUserDefaults] synchronize];//同步
+                    //.........查询数据库在本地保存手势密码
+                    NSString  *passWord =  [_myFMDB selectKeyWordFromTableWithData:user.mobile];
+                    [[NSUserDefaults standardUserDefaults] setObject:passWord forKey:@"kSecValueData"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    
+                }                
+                else
+                {
+                    [self presentViewController:_gestureVC animated:YES completion:nil];
+                }
+                
+            }
 
+        }
+            break;
+        case AlertTypeNetWorkError:
+            
+            break;
+        case AlertTypeOverdue:
+        {
+            //点击确定之后跳转到登陆接口
+        }
+            break;
+        case AlertTypeFingerPrint:
+        {
+            if (buttonIndex==1) {
+            
+            //点击确定之后开启密码
+            AAPLLocalAuthentication *AAPLocalAu = [[AAPLLocalAuthentication alloc] init];
+            
+            [AAPLocalAu canEvaluatePolicy];
+            AAPLocalAu.aapLocalAuSucessedCallBackB= ^(NSString *msg){
+            
+                NSLog(@"验证成功");
+            };
+            
+            [self presentViewController:AAPLocalAu animated:NO completion:^{
+                
+            }];
+            
+            AAPLocalAu.evaluateSucessedCallBackB = ^(NSString *msg)
+            {
+                NSLog(@"-----");
+                BOOL isOpenFingerprint = YES;
+                [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenFingerprint] forKey:@"isOpenFingerprint"];
+                [[NSUserDefaults  standardUserDefaults] synchronize];
+                [self dismissViewControllerAnimated:NO completion:^{
+                    
+                }];
+            };
+                DLog(@"----%d",[[NSThread currentThread] isMainThread]);
+            AAPLocalAu.evaluateFailedCallBackB = ^(NSString *msg,NSInteger errorCoe)
+            {
+            //失败分为很多种   后弹出设置失败，可在'我的账户'-'指纹'中再次设置
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *errorAlert = [[UIAlertView alloc]  initWithTitle:nil message:@"设置失败，可在'我的账户'-'指纹'中再次设置" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    errorAlert.tag = AlertTypeEvaluateError;
+                    [errorAlert show];
+                });
+                switch (errorCoe) {
+                    case -1:
+                    {
+                        //三次错误
+                    }
+                        break;
+                    case -2:
+                    {
+                    //点击取消
+                        
+                    }
+                        
+                        break;
+                    case -4:
+                    {
+                    //被系统取消
+                    }
+                        break;
+                    case -3:
+                    {
+                    //输入密码   被隐藏了
+                    }
+                        
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+            };
+            [AAPLocalAu evaluatePolicy];
+            }
+            else if (buttonIndex == 0)
+            {//取消
+                BOOL isOpenFingerprint = NO;
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenFingerprint]  forKey:@"isOpenFingerprint"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
+            break;
+            case AlertTypeEvaluateError:
+        {
+            [self dismissViewControllerAnimated:NO completion:^{
+                
+            }];
+        }
+            break;
+            
+        default:
+            break;
     }
+    
+    
+    
 }
+
+
 
 @end

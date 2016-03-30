@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MessageObj.h"
+typedef void(^ReturnBackBlock) (void);
 @interface MessageDetailViewController : UIViewController
 @property(nonatomic,strong)MessageObj *messageObj;
+@property(nonatomic,strong)ReturnBackBlock returnBackB;
 @end

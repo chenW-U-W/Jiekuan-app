@@ -100,7 +100,7 @@ enum
                         if (_sucessToProductIntrB) {
                             self.sucessToProductIntrB();//在产品详情页显示@“登录成功”
                         }
-                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"moreLoginReturnBack" object:self];
                         
                         [self.navigationController popViewControllerAnimated:YES];
                     });
@@ -140,8 +140,6 @@ enum
             } withMobile:_telephoneLabel.text withPassword:_passwordLabel.text];
                
         });
-        
-
    
     }
 

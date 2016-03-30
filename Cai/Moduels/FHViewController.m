@@ -97,7 +97,7 @@
 }
 - (void)goBack:(id)sender
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"drawBackToRootNotification" object:nil];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -114,6 +114,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    
         [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

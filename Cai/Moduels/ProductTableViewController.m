@@ -13,16 +13,14 @@
 #import "UIAlertView+AFNetworking.h"
 #import "ProductIntrViewController.h"
 #import "Product.h"
-#import "MBProgressHUD.h"
-#import "Product_assignTableViewController.h"
 #import "Product_assignTableViewCell.h"
 #import "Product_assign.h"
 #import "AnimationView.h"
-
+#import "UIButton+Extend.h"
 
 @interface ProductTableViewController ()
 {
-    MBProgressHUD *progressHUD;
+    
     int page;
     UIButton *productTab;
     UIButton *assignmentTab;
@@ -35,6 +33,7 @@
 @property (nonatomic,strong)NSMutableArray *assignmentArray;
 @property (nonatomic,strong)NSString *portString;
 @property (nonatomic,strong) Product_assign *product_assign;
+@property (nonatomic,strong) UIButton *currentBtn;
 
 @end
 
@@ -44,18 +43,16 @@
 
 - (void)loadDataWithType:(NSString *)atype withIsrefresh:(BOOL)isRefresh
 {
+    
     if ([atype intValue]== 1) {
         _portString = @"borrow.list";
-        
         if (isRefresh) {
             page = 1;
             [_productsArray removeAllObjects];
         }
-        DLog(@"------%d",page);
-        
+        DLog(@"------%d",page);        
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             [Product getProductsWithBlock:^(id posts, NSError *error,NSString *listType) {
-                //                [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
                 [AnimationView hideCustomAnimationViweFromView:self.view];
                 if (error) {
                     DLog(@"error.code = %ld",(long)error.code);
@@ -73,10 +70,7 @@
                             [_productTableView reloadData];
                             [self loadDataFinishWithArray:_productsArray isProductTableView:YES];
                         });
-                        
                     }
-                    
-                    
                 }
             } withPageSize:@"5" withPageNum:[NSString stringWithFormat:@"%d",page] withSname:_portString];
             
@@ -178,8 +172,6 @@
     
     TapView.image = [UIImage imageNamed:@"理财专区"];
     TapView.center =CGPointMake([UIScreen mainScreen].bounds.size.width/2.0, TAPHEIGHT/2.0+8);
-//    TapView.layer.borderWidth = 1;
-//    TapView.layer.borderColor = NORMALCOLOR.CGColor;
     [self.view addSubview:TapView];
     
     //添加标签
@@ -192,7 +184,7 @@
     productTab.titleLabel.font = [UIFont systemFontOfSize:15];
     [productTab addTarget:self action:@selector(loadDateWithButtonType:) forControlEvents:UIControlEventTouchUpInside];
     productTab.tag = 2000;
-    
+    productTab.isFirstClick = YES;
     
     assignmentTab = [UIButton buttonWithType:UIButtonTypeSystem];
     assignmentTab.frame = CGRectMake(productTab.frame.size.width, 0, productTab.frame.size.width, TAPHEIGHT);
@@ -203,27 +195,28 @@
     [assignmentTab setTitle:@"转让专区" forState:UIControlStateNormal];
     [assignmentTab addTarget:self action:@selector(loadDateWithButtonType:) forControlEvents:UIControlEventTouchUpInside];
     assignmentTab.tag = 2001;
+    assignmentTab.isFirstClick = YES;
     
     [TapView addSubview:productTab];
     [TapView addSubview:assignmentTab];
-    
+    UIButton *btn;
     
     if ([type intValue] == 1) {
-        UIButton *btn = (UIButton *)[self.view viewWithTag:2000];
-        [self loadDateWithButtonType:btn];
+      btn = (UIButton *)[self.view viewWithTag:2000];
     }
     else
     {
-        UIButton *btn = (UIButton *)[self.view viewWithTag:2001];
-        [self loadDateWithButtonType:btn];
-        
+       btn = (UIButton *)[self.view viewWithTag:2001];
     }
+   
+     [self loadDateWithButtonType:btn];
 
 }
 
 -(void)loadDateWithButtonType:(UIButton *)sender
 {
-    if (sender.tag == 2001) {
+    _currentBtn = sender;
+    if (_currentBtn.tag == 2001) {
         //改变btn的颜色
         [productTab setBackgroundColor:[UIColor whiteColor]];
         [productTab setTitleColor:NORMALCOLOR forState:UIControlStateNormal];
@@ -246,7 +239,7 @@
             _assignTableView.dataSource = self;
             _assignTableView.delegate = self;
             _assignTableView.pullingDelegate = self;
-            [self.view addSubview:_assignTableView];
+            
             _assignTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         }
         
@@ -255,19 +248,9 @@
         page = 1;
         
         
-        [self loadDataWithType:type withIsrefresh:YES];
-        
-        //        //添加MBProgressHUD
-        //        progressHUD = [[MBProgressHUD alloc] init];
-        //        progressHUD.color = [UIColor grayColor];
-        //        progressHUD.labelText = @"正在刷新";
-        //        progressHUD.labelFont = [UIFont systemFontOfSize:13];
-        //        [self.view addSubview:progressHUD];
-        //        [progressHUD show:YES];
-        
-        [AnimationView showCustomAnimationViewToView:self.view];
+       
     }
-    if (sender.tag == 2000) {
+    if (_currentBtn.tag == 2000) {
         if (_assignTableView) {
             [_assignTableView removeFromSuperview];
             _assignTableView = nil;
@@ -296,20 +279,12 @@
         type = @"1";
         page = 1;
         
-        
+    }
+    if (sender.isFirstClick) {
         [self loadDataWithType:type withIsrefresh:YES];
-        
-        //        //添加MBProgressHUD
-        //        progressHUD = [[MBProgressHUD alloc] init];
-        //        progressHUD.color = [UIColor grayColor];
-        //        progressHUD.labelText = @"正在刷新";
-        //        progressHUD.labelFont = [UIFont systemFontOfSize:13];
-        //        [self.view addSubview:progressHUD];
-        //        [progressHUD show:YES];
         [AnimationView showCustomAnimationViewToView:self.view];
     }
-    
-    
+    sender.isFirstClick = NO;
     
 }
 
@@ -317,32 +292,20 @@
 {
     [super viewWillAppear:YES];
     
-    if (!_productTableView) {
-        CGRect  frame= CGRectMake(0,TAPHEIGHT+16, DeviceSizeWidth, DeviceSizeHeight-TABHEIGHT - 64-TAPHEIGHT-16);
-        _productTableView = [[PullingRefreshTableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
-        _productTableView.backgroundColor = BACKGROUND_COLOR;
-        DLog(@"%@",NSStringFromCGRect(_productTableView.frame));
-        [self.view addSubview:_productTableView];
-        _productTableView.pullingDelegate = self;
-        _productTableView.dataSource = self;
-        _productTableView.delegate = self;
-        _productTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _productTableView.tag = 3000;
-    }
-   
-   // type = @"1";
-    page = 1;
-    
-    //    //添加MBProgressHUD
-    //    progressHUD = [[MBProgressHUD alloc] init];
-    //    progressHUD.color = [UIColor grayColor];
-    //    progressHUD.labelText = @"正在刷新";
-    //    progressHUD.labelFont = [UIFont systemFontOfSize:13];
-    //    [self.view addSubview:progressHUD];
-    //    [progressHUD show:YES];
-   // [AnimationView showCustomAnimationViewToView:self.view];
-    
-        //[self loadDataWithType:type withIsrefresh:YES];
+//    if (!_productTableView) {
+//        CGRect  frame= CGRectMake(0,TAPHEIGHT+16, DeviceSizeWidth, DeviceSizeHeight-TABHEIGHT - 64-TAPHEIGHT-16);
+//        _productTableView = [[PullingRefreshTableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
+//        _productTableView.backgroundColor = BACKGROUND_COLOR;
+//        DLog(@"%@",NSStringFromCGRect(_productTableView.frame));
+//        [self.view addSubview:_productTableView];
+//        _productTableView.pullingDelegate = self;
+//        _productTableView.dataSource = self;
+//        _productTableView.delegate = self;
+//        _productTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//        _productTableView.tag = 3000;
+//    }
+//   
+//    page = 1;
     
     
 }
@@ -415,7 +378,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.01;
+    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -446,6 +409,13 @@
         [self.navigationController pushViewController:_productIntrVC animated:YES];
         
     }
+    __block ProductTableViewController* weakSelf = self;
+    __block UIButton *weakButton = _currentBtn;
+    _productIntrVC.returnedCallBB = ^{
+        weakButton.isFirstClick = YES;
+        [weakSelf loadDateWithButtonType:weakButton];
+        
+    };
     
 }
 
@@ -471,6 +441,9 @@
     page++;
     [self loadDataWithType:type withIsrefresh:NO];
 }
+
+
+
 #pragma mark------------
 #pragma mark - Scroll
 //下拉 触发 UIScrollview的代理方法-----------------------调用pulling的方法--

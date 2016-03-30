@@ -11,6 +11,7 @@
 @class ProductIntrViewController;
 @class Product;
 typedef void(^PushToProductIntr) (NSString *);
+
 @interface ProductTableViewController : UIViewController<PullingRefreshTableViewDelegate,UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) ProductIntrViewController *productIntrVC;
 @property (nonatomic,strong) PullingRefreshTableView *productTableView;
@@ -18,4 +19,5 @@ typedef void(^PushToProductIntr) (NSString *);
 @property (nonatomic,strong) Product *product;
 @property (nonatomic,assign) BOOL needRefresh;
 @property (nonatomic,strong) PushToProductIntr pushToPuc;
+
 @end

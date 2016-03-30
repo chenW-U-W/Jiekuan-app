@@ -29,6 +29,7 @@
 #import "MYFMDB.h"
 #import "CailaiAPIClient.h"
 #import "AnimationView.h"
+#import "AAPLLocalAuthentication.h"
 //#import "UMSocialTencentWeiboHandler.h"
 @interface AppDelegate ()
 {
@@ -38,12 +39,13 @@
     AssetTableViewController *assetVC;
 }
 @property (nonatomic,strong) ProductIntrViewController *productIntrVC;
+@property (nonatomic,strong) AAPLLocalAuthentication *aapllocalAuthentic;
 @property (nonatomic,strong) MYFMDB *db;
 @end
 
 @implementation AppDelegate
-
-
+static BOOL ispresentGVC = NO;//是否在前台
+static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
      //创建一个数据库
@@ -55,21 +57,16 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
    
     
-    //[NSThread sleepForTimeInterval:3.0];//设置启动页面时间
-    
-    
     
    //如果客户登录过应用，服务器发送用户的设备类型 3 android 4 ios 手机号 userID
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"KuserID"]) {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"channelID"]) {
-            
-            
         }
-        
     };
     
     
-    //0 . 用NSUserDefaults判断用户是否需要重新登录
+    
+    // 用NSUserDefaults判断用户是否需要重新登录
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"IsNeedIntroduction"]) {
         NSUserDefaults*  ud=[[NSUserDefaults alloc] init];
         [ud setValue:@"1" forKey:@"IsNeedIntroduction"];
@@ -100,17 +97,15 @@
     
     //3.创建手势图
     _gesturePasswordVC = [[GesturePasswordController alloc] init];
-    
-    
+    //3.1创建指纹视图
+    _aapllocalAuthentic = [[AAPLLocalAuthentication alloc] init];
     
     
     //4.创建tabbar视图
     tabBarVC = [[UITabBarController alloc] init];
-    
     ProductTableViewController *productListVC = [[ProductTableViewController alloc] init];
     productListVC.navigationItem.title = @"产品列表";
     UINavigationController *productNav = [[UINavigationController alloc] initWithRootViewController:productListVC];
-    
     
     RecommendTableViewController *recommendVC = [[RecommendTableViewController alloc] init];
     recommendVC.navigationItem.title = @"精选推荐";
@@ -120,13 +115,11 @@
     MoreVC.navigationItem.title = @"更多";
     UINavigationController *MoretNav = [[UINavigationController alloc] initWithRootViewController:MoreVC];
     
-    
     assetVC = [[AssetTableViewController alloc] init];
     assetVC.navigationItem.title = @"我的资产";
     UINavigationController *assetNav = [[UINavigationController  alloc] initWithRootViewController:assetVC];
     
-      NSArray *tabBarItemArray = [NSArray arrayWithObjects:recommendNav,  productNav ,assetNav,MoretNav, nil];
-
+    NSArray *tabBarItemArray = [NSArray arrayWithObjects:recommendNav,  productNav ,assetNav,MoretNav, nil];
       
       
       tabBarVC.viewControllers = tabBarItemArray;
@@ -201,8 +194,7 @@
     
     //6 崩溃统计
     //设置友盟appkey
-    [UMSocialData setAppKey:@"55a8b23567e58e1a0f0018f7"];
-    
+      [UMSocialData setAppKey:@"55a8b23567e58e1a0f0018f7"];
 //    [MobClick startWithAppkey:@"55a8b23567e58e1a0f0018f7" reportPolicy:BATCH   channelId:nil];
 //    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 //    [MobClick setAppVersion:version];
@@ -220,12 +212,10 @@
     //使用新浪微博原生的SDK
     //打开新浪微博的SSO开关，设置新浪微博回调地址，这里必须要和你在新浪微博后台设置的回调地址一致。若在新浪后台设置我们的回调地址，“http://sns.whalecloud.com/sina2/callback”，这里可以传nil
     [UMSocialSinaSSOHandler openNewSinaSSOWithRedirectURL:@"http://www.cailai.com"];
-//    //使用非原生的sdk
-//    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.cailai.com"];
-    
-    //打开腾讯微博SSO开关，设置回调地址，只支持32位
-    //    [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
-    
+//   使用非原生的sdk
+//   [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.cailai.com"];
+//   打开腾讯微博SSO开关，设置回调地址，只支持32位
+//   [UMSocialTencentWeiboHandler openSSOWithRedirectUrl:@"http://sns.whalecloud.com/tencent2/callback"];
     
     //由于苹果审核政策需求，建议大家对未安装客户端平台进行隐藏
     [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ, UMShareToQzone, UMShareToWechatSession, UMShareToWechatTimeline]];
@@ -279,7 +269,6 @@
     if (userInfo) {
         NSLog(@"从消息启动:%@",userInfo);
         [BPush handleNotification:userInfo];
-        
     }
     
     //角标清0
@@ -296,9 +285,6 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     DLog(@"--------%@",userInfo);
-    
-   
-    
     if ([userInfo objectForKey:@"borrow_id"]) {
         int bidID = [[userInfo objectForKey:@"borrow_id"] intValue];
         //  由产品列表界面跳到产品界面
@@ -311,19 +297,8 @@
     }
     else if([userInfo objectForKey:@"member_phone"])
     {
-        tabBarVC.selectedIndex = 2;        
-//        WithDrawViewController *withDrawVC = [[WithDrawViewController alloc] init];
-//        withDrawVC.hidesBottomBarWhenPushed = YES;
-//        UINavigationController *VC = [ tabBarVC.viewControllers objectAtIndex:2];
-       // [VC pushViewController:withDrawVC animated:YES];
-        
-        
-       // assetVC.badgeNum = 1;
-      
-        
+        tabBarVC.selectedIndex = 2;
     }
-    
-    
     completionHandler(UIBackgroundFetchResultNewData);
     
 }
@@ -331,9 +306,7 @@
 // 在 iOS8 系统中，还需要添加这个方法。通过新的 API 注册推送服务
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
-    
     [application registerForRemoteNotifications];
-    
 }
 
 
@@ -346,9 +319,7 @@
         NSString *channelID = [result objectForKey:@"channel_id"];
         [[NSUserDefaults standardUserDefaults] setObject:channelID forKey:@"channelID"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        
     }];
-    
 }
 
 // 当 DeviceToken 获取失败时，系统会回调此方法
@@ -369,7 +340,6 @@
 //移除“启动页"
 - (void)removeSplashView
 {
-
     [adView removeFromSuperview];
     adView = nil;
 }
@@ -379,7 +349,6 @@
 - (UIViewController *)getCurrentVC
 {
     UIViewController *result = nil;
-    
     UIWindow * window = [[UIApplication sharedApplication] keyWindow];
     if (window.windowLevel != UIWindowLevelNormal)
     {
@@ -393,15 +362,12 @@
             }
         }
     }
-    
     UIView *frontView = [[window subviews] objectAtIndex:0];
     id nextResponder = [frontView nextResponder];
-    
     if ([nextResponder isKindOfClass:[UIViewController class]])
         result = nextResponder;
     else
         result = window.rootViewController;
-    
     return result;
 }
 
@@ -409,78 +375,7 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     
-//   //------------------测试接到远程通知用的---------------//
-//   int bidID = 1112;
-//   //  由产品列表界面跳到产品界面
-//    tabBarVC.selectedIndex = 1;
-//    _productIntrVC = [[ProductIntrViewController alloc] init];
-//    _productIntrVC.bidId = bidID;
-//    _productIntrVC.hidesBottomBarWhenPushed = YES;
-//    UINavigationController *VC = [ tabBarVC.viewControllers objectAtIndex:1];
-//    [VC pushViewController:_productIntrVC animated:YES];
-//
-//    //----------------------------------------------------//
-    
-    static BOOL ispresentGVC = NO;
-    //判断是否弹出手势开关  且手势密码为开
-     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue] == YES) {
-         
-        
-         
-         NSString *string  =  [[NSUserDefaults standardUserDefaults] objectForKey:@" kSecAttrAccount"];
-         __weak GesturePasswordController *weakGestureC = _gesturePasswordVC;
-         __weak AppDelegate *weakSelf = self;
-         //如果  手势密码 不存在
-         if ([string isEqualToString: @""]) {
-             
-             DLog(@"-------");
-         }
-         else
-         {
-             //验证手势成功 的回掉
-             _gesturePasswordVC.sVBlock = ^{
-                 
-                 [weakSelf.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
-                 [weakGestureC.gesturePasswordView.tentacleView enterArgin];
-                 ispresentGVC = NO;
-             };
-             
-             //手势 界面不在前台时：
-             if (!ispresentGVC) {
-                 [self.window.rootViewController presentViewController:_gesturePasswordVC animated:YES completion:nil];
-                 ispresentGVC = YES;
-                 
-                 
-             }
-             else
-             {
-                 
-             }
-             __block   UITabBarController *weakTabbarVC = tabBarVC;
-             __block   AppDelegate *weaDdelegate  = self;
-             
-             _gesturePasswordVC.FPWGBBlock = ^{
-             
-                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"您已退出当前账户请重新登录" delegate:weaDdelegate cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                 [alertView show];
-                 
-                 
-                 [weakGestureC dismissViewControllerAnimated:YES completion:nil];
-                 [User logout];
-                 ispresentGVC = NO;
-                 weakTabbarVC.selectedIndex = 0;//我的资产
-             };
-             
-             
-            
-         }
-
-     }
-    
-    
-    
-    
-       }
+}
  
 
 //  系统回调方法
@@ -502,19 +397,131 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
      [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+        //判断是否弹出手势开关  且手势密码为开
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue] == YES && [[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenFingerprint"] boolValue] == NO) {
+        [self doShowGesturePasswordView];
+        }
+    
+    
+}
+- (void)vertifyFingerPrint
+{
+
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenFingerprint"] boolValue] == YES) {
+        
+        __block   AppDelegate *weaDdelegate  = self;
+        if (!fingerPrintPresentVC) {
+            [self doShowFingerView];
+        }
+        
+        
+        _aapllocalAuthentic.evaluateSucessedCallBackB = ^(NSString *msg){
+            [weaDdelegate.window.rootViewController dismissViewControllerAnimated:NO completion:^{
+            }];
+            
+        };
+        _aapllocalAuthentic.evaluateFailedCallBackB = ^(NSString *msg,NSInteger errorCode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"指纹验证失效改为手势验证" delegate:weaDdelegate cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                alertView.tag = 100;
+                [alertView show];
+            });
+            
+        };
+        [_aapllocalAuthentic evaluatePolicy];
+        
+    }
+    else if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue] == YES )
+    {
+        [self doShowGesturePasswordView];
+    }
+
+
+}
+
+- (void)doShowFingerView
+{
+    [self.window.rootViewController presentViewController:_aapllocalAuthentic animated:NO completion:^{
+        
+    }];
+
+}
+
+- (void)doShowGesturePasswordView
+{
+    
+    NSString *string  =  [[NSUserDefaults standardUserDefaults] objectForKey:@" kSecAttrAccount"];
+    __weak GesturePasswordController *weakGestureC = _gesturePasswordVC;
+    __weak AppDelegate *weakSelf = self;
+    //如果  手势密码 不存在
+    if ([string isEqualToString: @""]) {
+        
+        DLog(@"-------");
+        return;
+    }
+    else
+    {
+        //验证手势成功 的回掉
+        _gesturePasswordVC.sVBlock = ^{
+            
+            [weakSelf.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+            [weakGestureC.gesturePasswordView.tentacleView enterArgin];
+            ispresentGVC = NO;
+        };
+        
+        //手势 界面不在前台时：
+        if (!ispresentGVC) {
+            [self.window.rootViewController presentViewController:_gesturePasswordVC animated:YES completion:nil];
+            ispresentGVC = YES;
+            
+            
+        }
+        
+        __block   UITabBarController *weakTabbarVC = tabBarVC;
+        __block   AppDelegate *weaDdelegate  = self;
+        
+        _gesturePasswordVC.FPWGBBlock = ^{
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"您已退出当前账户请重新登录" delegate:weaDdelegate cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [alertView show];
+            
+            
+            [weakSelf.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+            [User logout];
+            ispresentGVC = NO;
+            weakTabbarVC.selectedIndex = 0;//我的资产
+        };
+        
+        
+        
+    }
+    
+
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
-  
-    
+    [self vertifyFingerPrint];
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self.window.rootViewController dismissViewControllerAnimated:NO completion:^{
+        
+    }];
+    [self doShowGesturePasswordView];
+
+}
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 //    UIViewController *VC = [self getCurrentVC];
 //    for (AnimationView *animationView in VC.view.subviews) {
 //        [animationView animationedWithCustomViewOption:UIViewAnimationOptionCurveLinear];
 //    }
+    
    
 }
 

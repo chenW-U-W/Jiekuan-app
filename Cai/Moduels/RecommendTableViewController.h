@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "PullingRefreshTableView.h"
 #import <StoreKit/StoreKit.h>
+
 @class RecommendedObj;
 @interface RecommendTableViewController : UIViewController<PullingRefreshTableViewDelegate,UITableViewDataSource,UITableViewDelegate,UITabBarControllerDelegate,SKStoreProductViewControllerDelegate>
 @property (nonatomic,strong) PullingRefreshTableView *tableView;
 @property (nonatomic,strong) RecommendedObj *recomendedObj;
+
 @end

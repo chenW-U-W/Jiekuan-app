@@ -30,13 +30,17 @@
 }
 @property (strong,nonatomic) NSArray *bannerArray;
 @property (nonatomic,strong) AnimationView *animationView ;
+@property (nonatomic,strong) NSError *bannerError;
+@property (nonatomic,strong) NSError *contentError;
 @end
 
 @implementation RecommendTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      
+    
+    _bannerArray = [[NSArray alloc] init];
+    
       //1 判断用户是否注册登录
       BOOL isLogin = YES;
       if (!isLogin) {
@@ -45,12 +49,12 @@
       }
     
  
-      CGRect  frame=CGRectMake(0, 0, DeviceSizeWidth, DeviceSizeHeight);
+      CGRect  frame=CGRectMake(0, 0, DeviceSizeWidth, DeviceSizeHeight-44-49);
       _tableView = [[PullingRefreshTableView alloc] initWithFrame:frame pullingDelegate:self];
       _tableView.dataSource = self;
       _tableView.delegate = self;
       _tableView.backgroundColor = NORMALCOLOR;
-    _tableView.contentInset = UIEdgeInsetsMake(0, 0, 80, 0);
+     // _tableView.contentInset = UIEdgeInsetsMake(0, 0, 80, 0);
       [self.view addSubview:_tableView];
       
       //设置背景色
@@ -81,13 +85,11 @@
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         [window addSubview:introduce];
     }
-
+   
     [self checkVersions];
     
-    [AnimationView showCustomAnimationViewToView:self.view];
+    
     [self  loadData];
-    
-    
 }
 
 
@@ -102,7 +104,7 @@
             DLog(@"%@",localVersion);
            
             
-            if([versionString compare:localVersion] == NSOrderedSame || [versionString compare:localVersion] == NSOrderedDescending)//服务器版本 = 或者 > 本地版本都会提示升级，< 本地版本不会提示
+            if([versionString compare:localVersion] == NSOrderedDescending)//服务器版本  > 本地版本都会提示升级，< 本地版本不会提示   ----[versionString compare:localVersion] == NSOrderedSame || 
             {
                 
                 UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
@@ -122,6 +124,7 @@
     }];
 
 }
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -164,25 +167,20 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-      //添加MBProgressHUD
-//    progressHUD = [[MBProgressHUD alloc] init];
-//    progressHUD.color = [UIColor grayColor];
-//    progressHUD.labelText = @"正在刷新";
-//    progressHUD.labelFont = [UIFont systemFontOfSize:13];
-//    [self.view addSubview:progressHUD];
-//    [progressHUD show:YES];
     
-//    _animationView =  [[AnimationView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
-//   
-//    [_animationView animationedWithCustomViewOption:UIViewAnimationOptionCurveLinear];
-//    [self.view addSubview:_animationView];
-//    self.view.userInteractionEnabled = NO;
-   
 }
 
 
 - (void)loadData
 {
+    
+    
+    
+    [AnimationView showCustomAnimationViewToView:self.view];
+    
+    
+    
+    
     //请求滚动栏图片
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [Banner bannerViewWithBlock:^(id response, NSError *error) {
@@ -196,16 +194,11 @@
             
         }];
     });
-
-    
     
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [RecommendedObj recommendedWithBlock:^(id response, NSError *error) {
             [AnimationView hideCustomAnimationViweFromView:self.view];
-          //  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-//            [_animationView removeFromSuperview];
-//            _animationView = nil;
             self.view.userInteractionEnabled = YES;
             //如果请求失败
            if (error)
@@ -226,14 +219,13 @@
                 //刷新表视图
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_tableView reloadData];
-                                    });
+                    
+                });
 
             }
             //完成后
             [self.tableView tableViewDidFinishedLoading];
             self.tableView.reachedTheEnd  =YES;
-
-            
         }];
         
         
@@ -300,6 +292,7 @@
           //                  }
           int i = 0;
           for (Banner *bannerObj in _bannerArray) {
+              DLog(@"%ld----------",_bannerArray.count);
               UIImageView *imageView = [[UIImageView alloc]initWithFrame:(CGRect){0,0,[UIScreen mainScreen].bounds.size.width,kHeightCycleScroll}];
               [imageView setImageWithURL:[NSURL URLWithString:bannerObj.pic_url]];
               imageView.tag = 1000+i;
@@ -364,7 +357,9 @@
             productIntr.hidesBottomBarWhenPushed = YES;
           productIntr.bidId = _recomendedObj.bid;
           productIntr.titleString = _recomendedObj.bname;
-          
+          productIntr.returnedCallBB = ^{
+              [self loadData];
+          };
           [self.navigationController pushViewController:productIntr animated:YES];
       }
 }
