@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4209EE2B1CAB99F0007007A1 /* ToolObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 4209EE2A1CAB99F0007007A1 /* ToolObj.m */; };
 		4229DA461C969F4E00958947 /* UIButton+Extend.m in Sources */ = {isa = PBXBuildFile; fileRef = 4229DA451C969F4E00958947 /* UIButton+Extend.m */; };
 		4229DA6B1C97DF2300958947 /* IQNSArray+Sort.m in Sources */ = {isa = PBXBuildFile; fileRef = 4229DA4A1C97DF2300958947 /* IQNSArray+Sort.m */; };
 		4229DA6C1C97DF2300958947 /* IQUIScrollView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4229DA4C1C97DF2300958947 /* IQUIScrollView+Additions.m */; };
@@ -490,6 +491,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4209EE291CAB99F0007007A1 /* ToolObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToolObj.h; path = ../ToolObj.h; sourceTree = "<group>"; };
+		4209EE2A1CAB99F0007007A1 /* ToolObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToolObj.m; path = ../ToolObj.m; sourceTree = "<group>"; };
 		4229DA441C969F4E00958947 /* UIButton+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+Extend.h"; path = "../../UIButton+Extend.h"; sourceTree = "<group>"; };
 		4229DA451C969F4E00958947 /* UIButton+Extend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+Extend.m"; path = "../../UIButton+Extend.m"; sourceTree = "<group>"; };
 		4229DA491C97DF2300958947 /* IQNSArray+Sort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IQNSArray+Sort.h"; sourceTree = "<group>"; };
@@ -1667,6 +1670,8 @@
 		E2C972DC1ACD4DF000F18AB0 /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				4209EE291CAB99F0007007A1 /* ToolObj.h */,
+				4209EE2A1CAB99F0007007A1 /* ToolObj.m */,
 				4260B32F1C9A71A00055D1E3 /* LocalAuthentication.framework */,
 				4229DA471C97DF2300958947 /* IQKeyBoardManager */,
 				42B725281BB9137C00A80F62 /* libstdc++.tbd */,
@@ -2696,6 +2701,7 @@
 				425D805D1C87E80E00229A09 /* CailaiAPIClient.m in Sources */,
 				E2091E561AEA02FD003E7CF3 /* AssetObj.m in Sources */,
 				4229DA461C969F4E00958947 /* UIButton+Extend.m in Sources */,
+				4209EE2B1CAB99F0007007A1 /* ToolObj.m in Sources */,
 				7E99CB4C1AE0F15F00235E26 /* AFHTTPRequestOperation.m in Sources */,
 				4229DA6B1C97DF2300958947 /* IQNSArray+Sort.m in Sources */,
 				E208CFF61ADE19D100E881D9 /* RechargeDetaiViewController.m in Sources */,

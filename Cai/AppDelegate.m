@@ -280,7 +280,7 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
     
     NSString * version = [self getIOSVersion];
     //当用户打开app的时候 需要验证指纹解锁
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kUserMobile"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] && [version doubleValue] > 8.0) {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kUserMobile"] && [[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] && [version doubleValue] >= 8.0) {
         [self vertifyFingerPrint];
     }
     
@@ -415,7 +415,7 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
      [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
         //判断是否弹出手势开关  且手势密码为开
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue] == YES && [[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenFingerprint"] boolValue] == NO) {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"isOpenGesturePassword"] boolValue] == YES ) {
         [self doShowGesturePasswordView];
         }
     
@@ -440,7 +440,7 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
         _aapllocalAuthentic.evaluateFailedCallBackB = ^(NSString *msg,NSInteger errorCode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"指纹验证失效改为手势验证" delegate:weaDdelegate cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"指纹验证失败改为手势验证" delegate:weaDdelegate cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                 alertView.tag = 100;
                 [alertView show];
             });

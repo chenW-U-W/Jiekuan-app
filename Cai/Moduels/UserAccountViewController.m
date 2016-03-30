@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger,AlertType){
 #import "CLLoginViewController.h"
 #import "MYFMDB.h"
 #import "AAPLLocalAuthentication.h"
+#import "ToolObj.h"
 @interface UserAccountViewController ()<UIAlertViewDelegate>
 {
       UISwitch *gestureSwitch;
@@ -51,8 +52,15 @@ typedef NS_ENUM(NSInteger,AlertType){
       UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
       self.navigationItem.leftBarButtonItem = leftItem;
       
-      
-      textArray = [NSArray arrayWithObjects:@"绑定银行卡",@"身份认证",@"修改登录密码",@"手势密码",@"指纹", nil];
+    NSString *version = [[ToolObj sharedTool] getIOSVersion];
+    if ([version doubleValue] >= 8.0) {
+    textArray = [NSArray arrayWithObjects:@"绑定银行卡",@"身份认证",@"修改登录密码",@"手势密码",@"指纹", nil];
+    }
+    else
+    {
+    textArray = [NSArray arrayWithObjects:@"绑定银行卡",@"身份认证",@"修改登录密码",@"手势密码", nil];
+    }
+    
      _gestureVC = [[GesturePasswordController alloc] init];
      userArray = [[NSMutableArray alloc] init];
     
@@ -221,6 +229,7 @@ typedef NS_ENUM(NSInteger,AlertType){
             
             
         }
+            
             //指纹
             if(indexPath.row == 4)
             {

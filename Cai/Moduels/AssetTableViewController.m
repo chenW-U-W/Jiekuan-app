@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger,AlertType){
 #import "AnimationView.h"
 #import "InterestCountViewController.h"
 #import "AAPLLocalAuthentication.h"
+#import "ToolObj.h"
 #define rechageAndWithdrawBtnHeight  41
 @interface AssetTableViewController ()<UIAlertViewDelegate>
 {
@@ -643,10 +644,13 @@ typedef NS_ENUM(NSInteger,AlertType){
                     DLog(@"设置成功");
                     
                     [weakSelf dismissViewControllerAnimated:YES completion:nil];
-                    
-                    UIAlertView *fingerAlertview = [[UIAlertView alloc] initWithTitle:nil message:@"开启指纹解锁" delegate:weakSelf cancelButtonTitle:@"不开启" otherButtonTitles:@"好的", nil];
-                    fingerAlertview.tag = AlertTypeFingerPrint;
-                    [fingerAlertview show];
+                    NSString *version = [[ToolObj sharedTool] getIOSVersion];
+                    if ([version doubleValue] >= 8.0) {
+                        UIAlertView *fingerAlertview = [[UIAlertView alloc] initWithTitle:nil message:@"开启指纹解锁" delegate:weakSelf cancelButtonTitle:@"不开启" otherButtonTitles:@"好的", nil];
+                        fingerAlertview.tag = AlertTypeFingerPrint;
+                        [fingerAlertview show];
+
+                    }
                     
                 };
                 //1 查询数据库看数据库中是否有用户的信息
@@ -665,6 +669,14 @@ typedef NS_ENUM(NSInteger,AlertType){
                     NSString  *passWord =  [_myFMDB selectKeyWordFromTableWithData:user.mobile];
                     [[NSUserDefaults standardUserDefaults] setObject:passWord forKey:@"kSecValueData"];
                     [[NSUserDefaults standardUserDefaults] synchronize];
+                    
+                     NSString *version = [[ToolObj sharedTool] getIOSVersion];
+                    if ([version doubleValue] >= 8.0) {
+                        UIAlertView *fingerAlertview = [[UIAlertView alloc] initWithTitle:nil message:@"开启指纹解锁" delegate:weakSelf cancelButtonTitle:@"不开启" otherButtonTitles:@"好的", nil];
+                        fingerAlertview.tag = AlertTypeFingerPrint;
+                        [fingerAlertview show];
+                        
+                    }
                     
                 }                
                 else
