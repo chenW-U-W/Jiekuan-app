@@ -103,8 +103,8 @@ typedef NS_ENUM(NSInteger,AlertType){
 
     
     //注册通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rechargeBacKMethod:) name:@"rechargeBackToRootNotification" object:nil];//充值成功的通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(drawBacKMethod:) name:@"drawBackToRootNotification" object:nil];//提现成功的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rechargeBacKMethod:) name:@"rechargeBackToRootNotification" object:nil];//充值的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(drawBacKMethod:) name:@"drawBackToRootNotification" object:nil];//提现的通知
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moreLoginReturnBack:) name:@"moreLoginReturnBack" object:nil];//我的账户中，登陆成功
 }
 

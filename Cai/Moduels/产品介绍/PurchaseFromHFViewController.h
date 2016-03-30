@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "borrowerViewController.h"
+//typedef void(^ReturnedCallBackBlock)(void) ;
 @interface PurchaseFromHFViewController : borrowerViewController<UIWebViewDelegate>
 @property(nonatomic,strong)NSString *amountSting;
 @property(nonatomic,strong)NSDictionary *dic;//接收表单字典
+//@property (nonatomic , copy) ReturnedCallBackBlock returnedCallBB;
 @end

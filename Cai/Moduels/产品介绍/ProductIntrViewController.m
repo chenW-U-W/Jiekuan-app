@@ -373,8 +373,6 @@
     [super viewDidAppear:YES];
     
    
-
-    
    
     if (!animatedImageView && ![self.bidStatus isEqualToString:@"立即投标"]) {
         animatedImageView = [[UIImageView alloc] init];
@@ -613,20 +611,13 @@
     }
     timeout--;
       
-    
-    
-      
-      
-
-}
+    }
 
 
 
 - (void)goBack:(UIButton *)sender
 {
-    if (_returnedCallBB) {
-        self.returnedCallBB();
-    }
+    
       [self.navigationController popViewControllerAnimated:YES];
       [timer isValid];
 

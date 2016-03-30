@@ -374,22 +374,20 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _messageDeatilVC = [[MessageDetailViewController alloc] init];
-    __block MessageViewController* weakSelf = self;
+    __weak MessageViewController* weakSelf = self;
     __block UIButton *weakButton = _currentBtn;
     _messageDeatilVC.returnBackB = ^{
         weakButton.isFirstClick = YES;
         [weakSelf loadDateWithButtonType:weakButton];
         
     };
-
-    
     _messageDeatilVC.hidesBottomBarWhenPushed = YES;
     if (tableView.tag == 3000) {        
         if (_unreadArray.count>0) {
-            _messageDeatilVC.messageObj = [_unreadArray objectAtIndex:indexPath.section];
+            _messageDeatilVC.messageObj = [_unreadArray objectAtIndex:indexPath.row];
         }
       MessageObj *selectedMessageObj = [_unreadArray objectAtIndex:indexPath.row];
-        //向server端发送数据
+        //向server端发送数据  标记为已读
         [self  postMessageWithBlock:^(id response, NSError *error) {
             DLog(@"------");
             [self.navigationController pushViewController:_messageDeatilVC animated:YES];
@@ -399,7 +397,7 @@
     else
     {
         if (_readedArray.count>0) {
-            _messageDeatilVC.messageObj = [_readedArray objectAtIndex:indexPath.section];
+            _messageDeatilVC.messageObj = [_readedArray objectAtIndex:indexPath.row];
         }
         [self.navigationController pushViewController:_messageDeatilVC animated:YES];
     }

@@ -133,7 +133,7 @@
 #pragma -mark 忘记手势密码
 - (void)forget{
       //重新登录  改变手势
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"忘记手势密码会退出当前用户，需重新登录" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"忘记手势密码会退出当前用户，需重新登录" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
     [alertView show];
     
 }
@@ -222,29 +222,19 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 
-    if (buttonIndex == 0) {
-       
-    }
-    else
-    {
-    
-
+   
         //这个block是在我的账户中设置手势关闭时触发
         if (_FPWCBlock) {
-            self.FPWCBlock();
+            self.FPWCBlock();//清空当前保存的内容
         }
         //这个block是在由后台进入前台时触发
         else if (_FPWGBBlock)
         {
-          self.FPWGBBlock();
+          self.FPWGBBlock();//清空当前保存的内容
         }
     
-        
-    }
-    
-
-    
-    
+    //通知更多页面 隐藏退出按钮
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"exitLogin" object:nil];
 }
 
 

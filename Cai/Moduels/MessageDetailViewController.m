@@ -77,17 +77,17 @@
 
 - (void)goBack:(UIButton *)sender
 {
-//    if(self.returnBackB)
-//    {
-//    self.returnBackB();
-//    }
+    if(self.returnBackB)
+    {
+    self.returnBackB();
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
+    DLog(@"----");
 }
 
 

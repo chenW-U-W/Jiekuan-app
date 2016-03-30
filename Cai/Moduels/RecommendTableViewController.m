@@ -90,8 +90,14 @@
     
     
     [self  loadData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadSelfData) name:@"purchaseCallBack" object:nil];
 }
 
+- (void)reloadSelfData
+{
+    [self loadData];
+}
 
 -(void)checkVersions
 {
@@ -349,9 +355,6 @@
             productIntr.hidesBottomBarWhenPushed = YES;
           productIntr.bidId = _recomendedObj.bid;
           productIntr.titleString = _recomendedObj.bname;
-          productIntr.returnedCallBB = ^{
-              [self loadData];
-          };
           [self.navigationController pushViewController:productIntr animated:YES];
       }
 }

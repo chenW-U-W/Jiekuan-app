@@ -62,7 +62,14 @@
     self.navigationController.navigationBar.barTintColor = NORMALCOLOR;
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15], NSForegroundColorAttributeName:[UIColor whiteColor]};
     
-   
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hidExitBtn) name:@"exitLogin" object:nil];
+}
+
+- (void)hidExitBtn
+{
+    if (self.existButton) {
+        self.existButton.alpha = 0;
+    }
 }
 
 - (void)moreLoginReturnBack:(NSNotification *)info

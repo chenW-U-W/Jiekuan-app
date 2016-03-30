@@ -44,6 +44,10 @@
 
 - (void)goBack:(id)sender
 {
+//    if (_returnedCallBB) {
+//        self.returnedCallBB();
+//    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"purchaseCallBack" object:nil];//够买返回
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

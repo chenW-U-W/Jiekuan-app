@@ -211,6 +211,12 @@
    
      [self loadDateWithButtonType:btn];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSelfVie) name:@"purchaseCallBack" object:nil] ;
+}
+
+- (void)refreshSelfVie
+{
+    [self loadDataWithType:type withIsrefresh:YES];
 }
 
 -(void)loadDateWithButtonType:(UIButton *)sender
@@ -409,14 +415,7 @@
         [self.navigationController pushViewController:_productIntrVC animated:YES];
         
     }
-    __block ProductTableViewController* weakSelf = self;
-    __block UIButton *weakButton = _currentBtn;
-    _productIntrVC.returnedCallBB = ^{
-        weakButton.isFirstClick = YES;
-        [weakSelf loadDateWithButtonType:weakButton];
         
-    };
-    
 }
 
 

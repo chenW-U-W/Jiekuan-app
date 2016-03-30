@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PullingRefreshTableView.h"
-typedef void(^ReturnedCallBackBlock)(void) ;
+
 @class ProductDetail;
 @interface ProductIntrViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,PullingRefreshTableViewDelegate,UITabBarControllerDelegate,UITextFieldDelegate>
 @property (nonatomic , strong) PullingRefreshTableView    *tableView;
@@ -22,5 +22,5 @@ typedef void(^ReturnedCallBackBlock)(void) ;
 @property (nonatomic , assign) NSString *add_dateTime;
 
 @property (nonatomic , strong) NSString *bidStatus;
-@property (nonatomic , copy) ReturnedCallBackBlock returnedCallBB;
+
 @end
