@@ -119,10 +119,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.view addSubview:_customCalendarView];
         _customCalendarView.center = CGPointMake(self.view.center.x, _customCalendarView.center.y);
-        __block CustomCalendarViewController *weakSelf = self;
+        __weak CustomCalendarViewController *weakSelf = self;
          _customCalendarView.tapBlock = ^(NSString *year,NSString *month){
         //弹出datepicker 和  toolbar
-             _barView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height+1, [UIScreen mainScreen].bounds.size.width, BARVIEWHEIGHT)];
+            _barView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height+1, [UIScreen mainScreen].bounds.size.width, BARVIEWHEIGHT)];
             _barView.backgroundColor = [UIColor colorWithRed:0.922 green:0.922 blue:0.925 alpha:1];
              [[UIApplication sharedApplication].keyWindow addSubview:_barView];
              
@@ -289,7 +289,6 @@
                 if (myReceivArray.count >0) {
                     _messageTVC.totalArray = myReceivArray;
                 }
-               
                 else
                 {
                     NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:@"本月无还款项目",@"describeString", nil];
@@ -323,7 +322,8 @@
                         [UIView transitionWithView:weakCustomCalendarView
                                           duration:0.5f
                                            options:UIViewAnimationOptionTransitionCrossDissolve
-                                        animations:^ { [weakCustomCalendarView setNeedsDisplay];
+                                        animations:^ {
+                                            [weakCustomCalendarView setNeedsDisplay];
                                         }
                                         completion:nil];
                     }

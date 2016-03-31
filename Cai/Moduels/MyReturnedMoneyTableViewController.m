@@ -51,9 +51,7 @@
     _customCalendarVC = [[CustomCalendarViewController alloc] init];
     __block MyReturnedMoneyTableViewController *weakself = self;
     _customCalendarVC.month_releatedBlock = ^(NSMutableArray *month_releatedArray){
-    
         [weakself setMont_releatedTotalArray:month_releatedArray];
-        
     };
     [self.tableView addSubview:_customCalendarVC.view];
     
@@ -64,7 +62,7 @@
         CGFloat bottomSize = (num +1)*(CellSize+30)+150;
         weakSelf.tableView.contentInset = UIEdgeInsetsMake(0, 0, bottomSize, 0);
     };
-    [self.tableView addSubview:_messageTVC.view];    
+    [self.tableView addSubview:_messageTVC.view];
     
     _customCalendarVC.messageTVC = self.messageTVC;//强行建立关系
     
@@ -73,8 +71,7 @@
 }
 
 - (void)creatMonth_releatedView
-{
-    
+{    
     _mont_releatedView = [[UIView alloc] initWithFrame:CGRectMake(0, 310/ViewWithDevicHeight, [UIScreen mainScreen].bounds.size.width, CellSize)];
     _mont_releatedView.backgroundColor = [UIColor whiteColor];
     UILabel *shouldHuiKuanTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, [UIScreen mainScreen].bounds.size.width/2.0, 20)];
@@ -107,11 +104,7 @@
     huiKuan.textColor = [UIColor colorWithRed:1.000 green:0.451 blue:0.000 alpha:1];
     huiKuan.font = [UIFont systemFontOfSize:20];
     [_mont_releatedView addSubview:huiKuan];
-    
-    
-    [self.view addSubview:_mont_releatedView];
-    
-    
+    [self.view addSubview:_mont_releatedView];        
     
 }
 

@@ -30,13 +30,14 @@
         _circleImageView.image = [UIImage imageNamed:@"圆Animation"];
         [self addSubview:_circleImageView];
         
+        _timer = [NSTimer timerWithTimeInterval:0.05 target:self selector:@selector(runTime:) userInfo:nil repeats:YES];
+        NSRunLoop *myrunloop = [NSRunLoop currentRunLoop];
+        [myrunloop addTimer:_timer forMode:NSRunLoopCommonModes];
+        [_timer setFireDate:[NSDate distantFuture]];
+
     }
     
-    _timer = [NSTimer timerWithTimeInterval:0.05 target:self selector:@selector(runTime:) userInfo:nil repeats:YES];
-    NSRunLoop *myrunloop = [NSRunLoop currentRunLoop];
-    [myrunloop addTimer:_timer forMode:NSRunLoopCommonModes];
-    [_timer setFireDate:[NSDate distantFuture]];
-    return self;
+        return self;
 }
 
 -(void)hideLogoView

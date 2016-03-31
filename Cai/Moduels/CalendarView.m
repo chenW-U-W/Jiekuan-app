@@ -165,17 +165,17 @@
 //应还日期的每个月的标记
 -(void)markDateLabel:(NSArray *)array withButton:(CalendarButton *)abutton withDate:(NSDate *)adate
 {
+    int i = 0;
     
-    for (NSString *string in array) {        
-        
-        
+    for (NSString *string in array) {
+        i = i+1;
         NSDateFormatter *formate = [[NSDateFormatter alloc] init];
         formate.dateFormat = @"yyyy-MM-dd";
         NSDate *date = [formate dateFromString:string];
         NSDateComponents *components = [_gregorian components:_dayInfoUnits fromDate:date];
         
         
-        UIButton *button = (UIButton *)[self viewWithTag:[self buttonTagForDate:date]];
+        UIButton *button = (UIButton *)[self viewWithTag:[self buttonTagForDate:date]];//[self buttonTagForDate:date]
         
         NSDateComponents *calendarCompents = [_gregorian components:_dayInfoUnits fromDate:adate];
         if (components.year == calendarCompents.year && components.month == calendarCompents.month ) {
@@ -398,8 +398,6 @@
         //未被选中但是在本月内的颜色(之前被选中的)
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [button setBackgroundColor:[UIColor whiteColor]];
-        
-        
 
     }
 
@@ -608,17 +606,18 @@
     
     // Current month
     
-    for (NSInteger i= 0; i<monthLength; i++)
+    for (NSInteger i= 0; i<monthLength; i++)//必须是<= 要不然
     {
+        
         components.day      = i+1;
         NSInteger offsetX   = (_dayWidth*((i+weekdayBeginning)%7));
         NSInteger offsetY   = (_dayWidth *((i+weekdayBeginning)/7));
         NSInteger offsetWithImageY = (ImageViewHight *(((i+weekdayBeginning)/7)+1));
-        CalendarButton *button    = [self dayButtonWithFrame:CGRectMake(_originX+offsetX, _buttonHeight+5+_buttonHeight
-                                                                        +offsetY +offsetWithImageY, _dayWidth, _dayWidth)];
+        CalendarButton *button    = [self dayButtonWithFrame:CGRectMake(_originX+offsetX, _buttonHeight+5+_buttonHeight +offsetY +offsetWithImageY, _dayWidth, _dayWidth)];
         [self configureDayButton:button withDate:[_gregorian dateFromComponents:components]];
-        [self markDateLabel:_markedDateArray withButton:button withDate:_calendarDate];
         [self addSubview:button];
+        [self markDateLabel:_markedDateArray withButton:button withDate:_calendarDate];
+        
     }
     
     

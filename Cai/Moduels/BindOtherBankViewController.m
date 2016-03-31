@@ -67,6 +67,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self loadData];
+    [super viewWillAppear:YES];
 }
 
 

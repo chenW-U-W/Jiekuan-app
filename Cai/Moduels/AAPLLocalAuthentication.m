@@ -52,13 +52,13 @@ Abstract:
     // test if we can evaluate the policy, this test will tell us if Touch ID is available and enrolled
     success = [context canEvaluatePolicy: LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
     if (success) {
-        msg =[NSString stringWithFormat:NSLocalizedString(@"TOUCH_ID_IS_AVAILABLE", nil)];
+        msg =[NSString stringWithFormat:NSLocalizedString(@"指纹可用", nil)];
         if (self.aapLocalAuSucessedCallBackB) {
             self.aapLocalAuSucessedCallBackB(msg);
         }
         
     } else {
-        msg =[NSString stringWithFormat:NSLocalizedString(@"TOUCH_ID_IS_NOT_AVAILABLE", nil)];
+        msg =[NSString stringWithFormat:NSLocalizedString(@"指纹不可用", nil)];
         if (self.aapLocalAuFailedCallBackB) {
             self.aapLocalAuFailedCallBackB(msg);
         }
@@ -74,17 +74,17 @@ Abstract:
     __block  NSString *msg;
     context.localizedFallbackTitle = @"";
     // show the authentication UI with our reason string
-    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:NSLocalizedString(@"UNLOCK_ACCESS_TO_LOCKED_FATURE", nil) reply:
+    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:NSLocalizedString(@"通过Home键验证已有手机指纹", nil) reply:
      ^(BOOL success, NSError *authenticationError) {
          if (success) {
-             msg =[NSString stringWithFormat:NSLocalizedString(@"EVALUATE_POLICY_SUCCESS", nil)];
+             msg =[NSString stringWithFormat:NSLocalizedString(@"手机指纹可用", nil)];
              if (self.evaluateSucessedCallBackB) {
                  self.evaluateSucessedCallBackB(msg);
              }
              
          } else {//取消 错误
              NSLog(@"%@",authenticationError.domain);
-             msg = [NSString stringWithFormat:NSLocalizedString(@"EVALUATE_POLICY_WITH_ERROR", nil), authenticationError.localizedDescription];
+             msg = [NSString stringWithFormat:NSLocalizedString(@"手机指纹验证错误", nil), authenticationError.localizedDescription];
              if (self.evaluateFailedCallBackB) {
                  self.evaluateFailedCallBackB(msg,authenticationError.code);
              }

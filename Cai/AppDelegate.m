@@ -48,6 +48,8 @@ static BOOL ispresentGVC = NO;//是否在前台
 static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    
+    
      //创建一个数据库
     if (!_db) {
         MYFMDB *myFMDB= [[MYFMDB alloc] init];
@@ -288,6 +290,7 @@ static BOOL fingerPrintPresentVC = NO;//指纹界面是否在前台
     
     [self.window makeKeyAndVisible];
 
+    
       return YES;
 }
 

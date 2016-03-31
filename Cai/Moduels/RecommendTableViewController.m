@@ -351,11 +351,11 @@
 {
       if (indexPath.row == 1) {
             //进入产品介绍界面
-            ProductIntrViewController *productIntr = [[ProductIntrViewController alloc] init];
-            productIntr.hidesBottomBarWhenPushed = YES;
-          productIntr.bidId = _recomendedObj.bid;
-          productIntr.titleString = _recomendedObj.bname;
-          [self.navigationController pushViewController:productIntr animated:YES];
+        ProductIntrViewController *productIntr = [[ProductIntrViewController alloc] init];
+        productIntr.hidesBottomBarWhenPushed = YES;
+        productIntr.bidId = _recomendedObj.bid;
+        productIntr.titleString = _recomendedObj.bname;
+        [self.navigationController pushViewController:productIntr animated:YES];
       }
 }
 

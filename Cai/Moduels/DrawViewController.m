@@ -109,6 +109,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     _drawBtn.userInteractionEnabled = YES;
+    [super viewWillAppear:YES];
 }
 
 

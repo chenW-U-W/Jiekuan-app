@@ -16,7 +16,7 @@
       if (!self) {
             return nil;
       }
-    NSString *account_moneyString = [attributes objectForKey:@"account_money"];
+    //NSString *account_moneyString = [attributes objectForKey:@"account_money"];
       self.account_money = [[attributes objectForKey:@"account_money"] doubleValue];
       self.wait_capital =  [[attributes objectForKey:@"wait_capital"] doubleValue];
       self.money_collect = [[attributes objectForKey:@"money_collect"] doubleValue];

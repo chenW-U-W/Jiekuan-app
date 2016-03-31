@@ -292,9 +292,9 @@ typedef NS_ENUM(NSInteger,AlertType){
             NSLog(@"验证成功");
         };
         
-        [self presentViewController:AAPLocalAu animated:NO completion:^{
-            
-        }];
+//        [self presentViewController:AAPLocalAu animated:NO completion:^{
+//            
+//        }];
         
         AAPLocalAu.evaluateSucessedCallBackB = ^(NSString *msg)
         {
@@ -302,9 +302,9 @@ typedef NS_ENUM(NSInteger,AlertType){
             BOOL isOpenFingerprint = YES;
             [[NSUserDefaults  standardUserDefaults] setObject:[NSNumber numberWithBool:isOpenFingerprint] forKey:@"isOpenFingerprint"];
             [[NSUserDefaults  standardUserDefaults] synchronize];
-            [self dismissViewControllerAnimated:NO completion:^{
-                
-            }];
+//            [self dismissViewControllerAnimated:NO completion:^{
+//                
+//            }];
         };
         DLog(@"----%d",[[NSThread currentThread] isMainThread]);
         __block BOOL isOpenGesturePasswordWeak = isOpenGesturePassword;

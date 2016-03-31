@@ -255,7 +255,7 @@
             
             
         }
- 
+    [super viewDidAppear:YES];
 }
     //}
     

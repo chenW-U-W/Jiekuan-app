@@ -101,6 +101,7 @@
     textArray = [NSArray arrayWithObjects:text_myArray,text_caiLaiArray,text_functionArray,nil];
 
     [self.tableView reloadData];
+    [super viewWillAppear:YES];
 }
 
 - (void)didReceiveMemoryWarning {

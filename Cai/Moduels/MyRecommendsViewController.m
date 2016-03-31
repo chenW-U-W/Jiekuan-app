@@ -71,7 +71,7 @@
         [self.view addSubview:_tableView];
     
     [self loadData];
-    
+    [super viewDidAppear:YES];
 }
 
 - (void)loadData

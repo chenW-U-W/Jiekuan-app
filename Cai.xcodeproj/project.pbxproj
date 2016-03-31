@@ -2018,11 +2018,11 @@
 				645BDA531B82D974003AF94A /* CalendarView.m */,
 				645BDA4E1B82C850003AF94A /* CalendarButton.h */,
 				645BDA4F1B82C850003AF94A /* CalendarButton.m */,
-				645BDA5F1B830F49003AF94A /* MessageTableViewController.h */,
-				645BDA601B830F49003AF94A /* MessageTableViewController.m */,
 				645BDA681B83354E003AF94A /* CustomTableViewCell.h */,
 				645BDA691B83354E003AF94A /* CustomTableViewCell.m */,
 				645BDA6A1B83354E003AF94A /* CustomTableViewCell.xib */,
+				645BDA5F1B830F49003AF94A /* MessageTableViewController.h */,
+				645BDA601B830F49003AF94A /* MessageTableViewController.m */,
 			);
 			name = "我的资产";
 			sourceTree = "<group>";

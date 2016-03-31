@@ -73,7 +73,7 @@ MBProgressHUD *progressHUD;
         [self.view addSubview:_imageView];
         
     }
-    
+    [super viewDidAppear:YES];
 }
 
 - (void)loadData
