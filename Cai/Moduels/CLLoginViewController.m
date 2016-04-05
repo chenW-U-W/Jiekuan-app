@@ -189,6 +189,9 @@ enum
 {
     _telephoneLabel.delegate = nil;
     _passwordLabel.delegate = nil;
+   
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+ 
 
 }
 

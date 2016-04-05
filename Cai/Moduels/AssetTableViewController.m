@@ -788,6 +788,12 @@ typedef NS_ENUM(NSInteger,AlertType){
     
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
+
 
 
 @end

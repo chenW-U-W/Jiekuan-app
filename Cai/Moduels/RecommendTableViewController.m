@@ -390,4 +390,10 @@
       [self.tableView tableViewDidEndDragging:scrollView];
 }
 
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
 @end

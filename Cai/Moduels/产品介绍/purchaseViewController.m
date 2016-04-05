@@ -560,4 +560,10 @@
 {
     _tenderBtn.userInteractionEnabled = YES;
 }
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
 @end
